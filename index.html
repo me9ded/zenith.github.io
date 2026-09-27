@@ -34,6 +34,7 @@
     --patch-2: #fcc4d1;
     --rim-top: #fac9d3;
     --rim: #e39aab;
+    --rim-dots: rgba(255,246,234,0.85);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -218,7 +219,10 @@
     left: 50%; bottom: 112px;
     width: 162px; height: 18px;
     transform: translateX(-50%);
-    background: linear-gradient(180deg, var(--rim-top) 0%, var(--rim) 100%);
+    /* the rim: the part she spent forever on, small circles all the way round */
+    background:
+      radial-gradient(circle, var(--rim-dots) 0 2px, transparent 2.6px) 3px 50% / 11px 100% repeat-x,
+      linear-gradient(180deg, var(--rim-top) 0%, var(--rim) 100%);
     border-radius: 50%;
   }
 
@@ -1518,8 +1522,9 @@
   <div class="studio-parts" id="studioParts" role="radiogroup" aria-label="What to paint">
     <button class="studio-part" type="button" role="radio" aria-checked="true" data-part="glaze">the glaze</button>
     <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="spots">the scales</button>
-    <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="patch">the tiny section</button>
+    <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="patch">the patch</button>
     <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="rim">the rim</button>
+    <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="dots">the rim&rsquo;s circles</button>
   </div>
   <div class="studio-swatches" id="studioSwatches"></div>
   <p class="swatch-name" id="swatchName" aria-live="polite"></p>
@@ -2087,12 +2092,17 @@
     out += '<path d="' + body + '" fill="' + o.body + '"/>';
     if (o.spots) out += '<rect x="' + x + '" y="50" width="120" height="60" fill="url(#' + id + 'p)" clip-path="url(#' + id + 'c)"/>';
     out += '<ellipse cx="' + (x + 60) + '" cy="57" rx="44" ry="5" fill="' + o.rim + '"/>';
+    if (o.dots) {
+      for (let i = -4; i <= 4; i++) {
+        out += '<circle cx="' + (x + 60 + i * 9.5) + '" cy="57.4" r="1.5" fill="' + o.dots + '"/>';
+      }
+    }
     if (o.patch) out += '<ellipse cx="' + (x + 38) + '" cy="72" rx="12" ry="8" transform="rotate(-12 ' + (x + 38) + ' 72)" fill="' + o.patch + '"/>';
     return out;
   }
 
   const BISQUE = { body: '#e6ddd0', rim: '#efe8dd' };
-  const HERS = { body: '#f0adbb', rim: '#fac9d3', spots: 'rgba(197,109,131,0.35)', patch: '#ffd3dc', candle: true };
+  const HERS = { body: '#f0adbb', rim: '#f3b3c1', dots: '#fff6ea', spots: 'rgba(197,109,131,0.35)', patch: '#ffd3dc', candle: true };
   const HIS = { body: '#1f2d5c', rim: '#34498a', spots: null, patch: null };
 
   function svgWrap(inner, viewBox) {
@@ -2137,8 +2147,8 @@
       line: 'you took ages deciding which colours to use. i didn’t mind. i liked watching you decide.'
     },
     {
-      art: () => svgWrap(potSVG(Object.assign({ x: 60 }, HERS, { candle: false })) + brush(106, 64)),
-      line: 'then one tiny section. you worked on it forever, slow and careful. it came out perfect.'
+      art: () => svgWrap(potSVG(Object.assign({ x: 60 }, HERS, { candle: false })) + brush(150, 56)),
+      line: 'then the rim. all those tiny circles. you worked on it forever, slow and careful. it came out perfect.'
     },
     {
       art: () => svgWrap(potSVG(Object.assign({ x: 60 }, HIS))),
@@ -2222,14 +2232,16 @@
     '--glaze': '#f5b8c4', '--glaze-deep': '#e39aab', '--glaze-edge': '#d4879b',
     '--spots': 'rgba(197,109,131,0.30)',
     '--patch': '#ffd3dc', '--patch-2': '#fcc4d1',
-    '--rim-top': '#fac9d3', '--rim': '#e39aab'
+    '--rim-top': '#fac9d3', '--rim': '#e39aab',
+    '--rim-dots': 'rgba(255,246,234,0.85)'
   };
 
   const PART_VARS = {
     glaze: ['--glaze', '--glaze-deep', '--glaze-edge'],
     spots: ['--spots'],
     patch: ['--patch', '--patch-2'],
-    rim: ['--rim-top', '--rim']
+    rim: ['--rim-top', '--rim'],
+    dots: ['--rim-dots']
   };
 
   // mix a hex colour toward white (amt > 0) or black (amt < 0)
@@ -2250,6 +2262,7 @@
     if (part === 'glaze') return [hex, shade(hex, -0.1), shade(hex, -0.18)];
     if (part === 'spots') return [alpha(hex, 0.5)];
     if (part === 'patch') return [hex, shade(hex, -0.05)];
+    if (part === 'dots') return [alpha(hex, 0.9)];
     return [shade(hex, 0.12), shade(hex, -0.08)];
   }
 
