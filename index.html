@@ -24,6 +24,16 @@
     --cream: #fff6ea;
     --muted: #a08ba0;
     --wick: #4a3a45;
+
+    /* her candle holder, exactly as she painted it in july (the studio can repaint it) */
+    --glaze: #f5b8c4;
+    --glaze-deep: #e39aab;
+    --glaze-edge: #d4879b;
+    --spots: rgba(197,109,131,0.30);
+    --patch: #ffd3dc;
+    --patch-2: #fcc4d1;
+    --rim-top: #fac9d3;
+    --rim: #e39aab;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -185,9 +195,9 @@
     width: 150px; height: 96px;
     transform: translateX(-50%);
     background:
-      radial-gradient(circle at 11px 0px, rgba(197,109,131,0.30) 0 5px, transparent 6px) 0 0 / 22px 14px repeat,
-      radial-gradient(circle at 11px 0px, rgba(197,109,131,0.30) 0 5px, transparent 6px) 11px 7px / 22px 14px repeat,
-      linear-gradient(160deg, var(--pink) 0%, var(--pink-deep) 78%, #d4879b 100%);
+      radial-gradient(circle at 11px 0px, var(--spots) 0 5px, transparent 6px) 0 0 / 22px 14px repeat,
+      radial-gradient(circle at 11px 0px, var(--spots) 0 5px, transparent 6px) 11px 7px / 22px 14px repeat,
+      linear-gradient(160deg, var(--glaze) 0%, var(--glaze-deep) 78%, var(--glaze-edge) 100%);
     border-radius: 14px 14px 60px 60px / 14px 14px 78px 78px;
     box-shadow: inset 0 -12px 24px rgba(0,0,0,0.18), inset 8px 6px 14px rgba(255,255,255,0.28);
   }
@@ -197,7 +207,7 @@
     position: absolute;
     top: 16px; left: 22px;
     width: 44px; height: 30px;
-    background: linear-gradient(140deg, #ffd3dc 0%, #fcc4d1 100%);
+    background: linear-gradient(140deg, var(--patch) 0%, var(--patch-2) 100%);
     border-radius: 60% 45% 55% 50% / 55% 60% 45% 55%;
     opacity: 0.9;
   }
@@ -208,8 +218,44 @@
     left: 50%; bottom: 112px;
     width: 162px; height: 18px;
     transform: translateX(-50%);
-    background: linear-gradient(180deg, #fac9d3 0%, var(--pink-deep) 100%);
+    background: linear-gradient(180deg, var(--rim-top) 0%, var(--rim) 100%);
     border-radius: 50%;
+  }
+
+  /* ---------- his piece, keeping hers company ---------- */
+  .his-piece {
+    position: absolute;
+    z-index: 3;
+    right: -98px;
+    bottom: 2px;
+    padding: 4px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25));
+  }
+  .his-piece svg { display: block; overflow: visible; }
+  .his-piece:focus-visible { outline: 1px dashed rgba(179,195,242,0.6); border-radius: 12px; }
+  .his-piece .his-flame, .his-piece .his-glow {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    transition: opacity 0.8s ease;
+  }
+  .his-piece.lit .his-flame { opacity: 1; animation: hisFlicker 2.1s ease-in-out infinite; }
+  .his-piece.lit .his-glow { opacity: 1; }
+  @keyframes hisFlicker {
+    0%, 100% { transform: scale(1) rotate(-2deg); }
+    50%      { transform: scale(0.94, 1.06) rotate(2deg); }
+  }
+  @media (max-width: 640px) {
+    .his-piece { right: -72px; bottom: 6px; }
+    .his-piece svg { width: 54px; height: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .his-piece.lit .his-flame { animation: none; }
   }
 
   /* ---------- critters ---------- */
@@ -467,6 +513,7 @@
 
   .note.show { opacity: 1; transform: translateY(0); }
   .note.secret { color: var(--pink); }
+  .note.his { color: #b3c3f2; }
   .note.case {
     font-family: 'Special Elite', monospace;
     font-size: 1rem;
@@ -526,8 +573,8 @@
   .main.hidden { display: none; }
 
 
-  /* ---------- breathing mode ---------- */
-  .breath-overlay {
+  /* ---------- full-screen overlays: breathing, the pottery place, the studio ---------- */
+  .overlay {
     position: fixed;
     inset: 0;
     background: var(--bg-deep);
@@ -535,13 +582,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 30; /* above the fixed buttons: nothing but the breath */
+    z-index: 30; /* above the fixed buttons: nothing but the overlay */
     opacity: 0;
     pointer-events: none;
     transition: opacity 1s ease;
   }
 
-  .breath-overlay.on { opacity: 1; pointer-events: auto; }
+  .overlay.on { opacity: 1; pointer-events: auto; }
 
   .breath-glow {
     width: 220px; height: 220px;
@@ -595,6 +642,172 @@
   @media (prefers-reduced-motion: reduce) {
     .lit .glow, .lit .flame, .breath-overlay.on .breath-glow { animation: none; }
     .note, .pill, .glow, .flame { transition-duration: 0.2s; }
+  }
+
+  /* ---------- keepsakes: unlocked once the case is solved ---------- */
+  .keepsakes {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 4px 0 18px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+  }
+  .keepsakes.on { opacity: 1; transform: none; }
+  .keepsakes[hidden] { display: none; }
+  .keepsake {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 16px 9px 12px;
+    background: rgba(255,201,122,0.06);
+    border: 1px solid rgba(255,201,122,0.3);
+    border-radius: 999px;
+    color: var(--glow);
+    font-family: 'Special Elite', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.25s ease;
+  }
+  .keepsake svg { display: block; flex: none; }
+  .keepsake:hover, .keepsake:focus-visible { background: rgba(255,201,122,0.16); outline: none; }
+  .keepsake[hidden] { display: none; }
+
+  /* ---------- the pottery place: a short chapter about the first date ---------- */
+  .chapter, .studio {
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: max(40px, 11vh) 20px 32px;
+  }
+  .overlay-kicker {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .chapter-art {
+    width: min(380px, 88vw);
+    height: 220px;
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .chapter-art svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .chapter-art.turn { animation: chapterTurn 0.7s ease; }
+  @keyframes chapterTurn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .chapter-line {
+    max-width: 420px;
+    min-height: 4em;
+    margin-top: 18px;
+    font-family: 'Caveat', cursive;
+    font-size: 1.75rem;
+    line-height: 1.3;
+    color: var(--cream);
+  }
+  .chapter-nav {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 26px;
+  }
+  .chapter-dots { display: flex; gap: 7px; }
+  .chapter-dots span {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(160,139,160,0.35);
+    transition: background 0.3s ease;
+  }
+  .chapter-dots span.on { background: var(--pink); }
+  .chapter-nav .pill { min-width: 104px; }
+  .chapter-nav .pill:disabled { opacity: 0.3; cursor: default; background: none; color: var(--pink); }
+  .overlay-exit {
+    margin-top: 22px;
+    background: none;
+    border: none;
+    color: rgba(160,139,160,0.7);
+    font-family: 'Karla', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 12px 20px;
+  }
+  .overlay-exit:hover, .overlay-exit:focus-visible { color: var(--cream); outline: none; }
+
+  /* ---------- the studio: paint it again ---------- */
+  .studio-piece {
+    position: relative;
+    flex: none;
+    width: 240px;
+    height: 212px;
+    margin-top: 10px;
+  }
+  .studio-sub {
+    margin-top: 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 1.35rem;
+    color: var(--pink);
+  }
+  .studio-parts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .studio-part {
+    padding: 7px 13px;
+    background: none;
+    border: 1px dashed rgba(245,184,196,0.4);
+    border-radius: 999px;
+    color: var(--muted);
+    font-family: 'Special Elite', monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+  }
+  .studio-part[aria-checked="true"] { border-style: solid; border-color: var(--pink); color: var(--pink); background: rgba(245,184,196,0.1); }
+  .studio-part:focus-visible { outline: 1px dashed var(--glow); outline-offset: 2px; }
+  .studio-swatches {
+    display: grid;
+    grid-template-columns: repeat(5, 40px);
+    gap: 12px;
+    justify-content: center;
+    margin-top: 18px;
+  }
+  .swatch {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,246,234,0.18);
+    background: var(--c);
+    cursor: pointer;
+    box-shadow: inset 0 -4px 8px rgba(0,0,0,0.18), inset 3px 3px 6px rgba(255,255,255,0.22);
+    transition: transform 0.2s ease;
+  }
+  .swatch:hover { transform: scale(1.08); }
+  .swatch[aria-pressed="true"] { border-color: var(--cream); transform: scale(1.12); }
+  .swatch:focus-visible { outline: 2px dashed var(--glow); outline-offset: 3px; }
+  .swatch-name {
+    min-height: 1.4em;
+    margin-top: 12px;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .studio-actions { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; justify-content: center; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .keepsakes, .chapter-art.turn { transition: none; animation: none; }
   }
 
   /* ---- CASE FILE #003: the vanishing dinosaurs ---- */
@@ -1120,6 +1333,43 @@
   <div class="holder"></div>
   <button class="flame-tap" id="flameTap" aria-label="The flame"></button>
 
+  <!-- the other piece from that table: dark blue, borrowing her kingsnake's bands -->
+  <button class="his-piece" id="hisPiece" type="button" aria-label="The dark blue piece from the same table">
+    <svg viewBox="0 0 80 64" width="76" height="61" aria-hidden="true">
+      <defs>
+        <linearGradient id="hisGlaze" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#2d4077"/>
+          <stop offset="0.7" stop-color="#1c2a54"/>
+          <stop offset="1" stop-color="#141e3d"/>
+        </linearGradient>
+        <radialGradient id="hisGlowFill">
+          <stop offset="0" stop-color="rgba(255,201,122,0.55)"/>
+          <stop offset="1" stop-color="rgba(255,201,122,0)"/>
+        </radialGradient>
+        <clipPath id="hisBowl">
+          <path d="M6 22 Q6 18 10 18 H70 Q74 18 74 22 C74 44 60 60 40 60 C20 60 6 44 6 22 Z"/>
+        </clipPath>
+      </defs>
+      <circle class="his-glow" cx="40" cy="6" r="22" fill="url(#hisGlowFill)"/>
+      <path class="his-flame" d="M40 -3 C44.5 2 45.5 7 40 11 C34.5 7 35.5 2 40 -3 Z" fill="#ffc97a"/>
+      <rect x="39.2" y="10" width="1.6" height="4" rx="0.8" fill="#4a3a45"/>
+      <rect x="31" y="13" width="18" height="7" rx="2" fill="#fdf3e3"/>
+      <path d="M6 22 Q6 18 10 18 H70 Q74 18 74 22 C74 44 60 60 40 60 C20 60 6 44 6 22 Z" fill="url(#hisGlaze)"/>
+      <g clip-path="url(#hisBowl)" fill="none" stroke-linecap="butt">
+        <g stroke="#0d1226" stroke-width="7">
+          <path d="M15 18 Q13 38 19 60"/><path d="M31 18 Q30 40 32 62"/>
+          <path d="M49 18 Q50 40 48 62"/><path d="M65 18 Q67 38 61 60"/>
+        </g>
+        <g stroke="#fff6ea" stroke-width="3.4">
+          <path d="M15 18 Q13 38 19 60"/><path d="M31 18 Q30 40 32 62"/>
+          <path d="M49 18 Q50 40 48 62"/><path d="M65 18 Q67 38 61 60"/>
+        </g>
+      </g>
+      <ellipse cx="40" cy="19" rx="34" ry="3.6" fill="#34498a"/>
+      <ellipse cx="19" cy="30" rx="6" ry="4" transform="rotate(-30 19 30)" fill="rgba(255,255,255,0.18)"/>
+    </svg>
+  </button>
+
   <div class="critter tarantula" aria-hidden="true">
     <div class="thread"></div>
     <svg width="46" height="42" viewBox="0 0 60 54">
@@ -1204,6 +1454,23 @@
   <p class="note" id="note" aria-live="polite"></p>
 </div>
 
+<div class="keepsakes" id="keepsakes" hidden>
+  <button class="keepsake" id="doorBtn" type="button">
+    <svg width="18" height="24" viewBox="0 0 18 24" aria-hidden="true">
+      <path d="M2 23 V7 a7 7 0 0 1 14 0 V23 Z" fill="rgba(255,201,122,0.15)" stroke="#ffc97a" stroke-width="1.6"/>
+      <circle cx="12.4" cy="14.5" r="1.2" fill="#ffc97a"/>
+    </svg>
+    the pottery place
+  </button>
+  <button class="keepsake" id="paintBtn" type="button" hidden>
+    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+      <path d="M20 2 L9.5 12.5" stroke="#ffc97a" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M9 12 C6 11 3.5 13 3.6 15.6 C3.7 18 2.6 19.3 1.5 20 C5 20.8 9.8 20 10.4 16 C10.7 14.4 10.2 13 9 12 Z" fill="#f5b8c4"/>
+    </svg>
+    paint it again
+  </button>
+</div>
+
 <div class="pond">
   <div class="swimmer">
     <span class="flip" id="axoTap" role="button" tabindex="0" aria-label="Breathe with the axolotl">
@@ -1228,7 +1495,42 @@
 
 </div>
 
-<div class="breath-overlay" id="breathOverlay" role="dialog" aria-modal="true" aria-label="Breathe with the glow" inert>
+<div class="overlay chapter" id="chapter" role="dialog" aria-modal="true" aria-labelledby="chapterTitle" inert>
+  <p class="overlay-kicker" id="chapterTitle">the pottery place &middot; july 2026</p>
+  <div class="chapter-art" id="chapterArt" aria-hidden="true"></div>
+  <p class="chapter-line" id="chapterLine" aria-live="polite"></p>
+  <div class="chapter-nav">
+    <button class="pill" id="chapterPrev" type="button">back</button>
+    <div class="chapter-dots" id="chapterDots" aria-hidden="true"></div>
+    <button class="pill" id="chapterNext" type="button">next</button>
+  </div>
+  <button class="overlay-exit" id="chapterExit" type="button">back to the candle</button>
+</div>
+
+<div class="overlay studio" id="studio" role="dialog" aria-modal="true" aria-labelledby="studioTitle" inert>
+  <p class="overlay-kicker" id="studioTitle">the studio</p>
+  <p class="studio-sub">your turn again</p>
+  <div class="studio-piece" id="studioPiece" aria-hidden="true">
+    <div class="candle"></div>
+    <div class="holder-rim"></div>
+    <div class="holder"></div>
+  </div>
+  <div class="studio-parts" id="studioParts" role="radiogroup" aria-label="What to paint">
+    <button class="studio-part" type="button" role="radio" aria-checked="true" data-part="glaze">the glaze</button>
+    <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="spots">the scales</button>
+    <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="patch">the tiny section</button>
+    <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="rim">the rim</button>
+  </div>
+  <div class="studio-swatches" id="studioSwatches"></div>
+  <p class="swatch-name" id="swatchName" aria-live="polite"></p>
+  <div class="studio-actions">
+    <button class="pill" id="studioKeep" type="button">keep it</button>
+    <button class="pill" id="studioOriginal" type="button">the july original</button>
+  </div>
+  <button class="overlay-exit" id="studioExit" type="button">back to the candle</button>
+</div>
+
+<div class="overlay breath-overlay" id="breathOverlay" role="dialog" aria-modal="true" aria-label="Breathe with the glow" inert>
   <div class="breath-glow"></div>
   <p class="breath-text" id="breathText">breathe in</p>
   <p class="breath-sub">no words needed. just this.</p>
@@ -1423,6 +1725,11 @@
 
   const caseVerdict = "CASE FILE #003: the vanishing dinosaurs\nVICTIM: one (1) cookie. devoured at the scene.\nEVIDENCE: three-toed footprints. a torn confession reading 'RAW\u2014'. a chalk outline where the cookie used to be.\nVERDICT: it was the ceratosaurus and the spinosaurus. in the margins. with the RAWR.\nSENTENCE: to chase the detective around this page forever.\n\u2014 detective amine";
 
+  const hisNotes = [
+    "mine was the dark blue one, from the same table. on here i let it borrow your kingsnake's stripes.",
+    "two candles now. yours lights the whole page. mine just likes sitting next to it."
+  ];
+
   const secretNotes = [
     "You looked very cute on our first date, especially when you were deciding which colours to use, and when you were painting.",
     "Second secret: I built every hidden thing on this page because I like the way you look when you find things."
@@ -1440,6 +1747,7 @@
   const main = $('main');
   const scene = $('scene');
   const flameTap = $('flameTap');
+  const hisPiece = $('hisPiece');
   const hint = $('hint');
   const hint2 = $('hint2');
   const note = $('note');
@@ -1464,10 +1772,30 @@
   const releaseBtn2 = $('releaseBtn2');
   const restBtn = $('restBtn');
   const restNote = $('restNote');
+  const keepsakes = $('keepsakes');
+  const doorBtn = $('doorBtn');
+  const paintBtn = $('paintBtn');
+  const chapter = $('chapter');
+  const chapterArt = $('chapterArt');
+  const chapterLine = $('chapterLine');
+  const chapterDots = $('chapterDots');
+  const chapterPrev = $('chapterPrev');
+  const chapterNext = $('chapterNext');
+  const chapterExit = $('chapterExit');
+  const studio = $('studio');
+  const studioPiece = $('studioPiece');
+  const studioParts = $('studioParts');
+  const studioSwatches = $('studioSwatches');
+  const swatchName = $('swatchName');
+  const studioKeep = $('studioKeep');
+  const studioOriginal = $('studioOriginal');
+  const studioExit = $('studioExit');
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = window.matchMedia('(pointer: fine)').matches;
   const CASE_KEY = 'zenith-case-003';
+  const GLAZE_KEY = 'zenith-glaze';
+  const DATE_SEEN_KEY = 'zenith-date-seen';
   const SOLVED_STATUS = 'STATUS: solved. culprits at large. do not run. (they love it when you run.)';
 
   // ---- state ----
@@ -1475,6 +1803,7 @@
   let deck = [];
   let lastNote = null;
   let secretIdx = 0;
+  let hisIdx = 0;
   let caseIdx = 0;
   let cluesFound = 0;
   let caseSolved = false;
@@ -1487,6 +1816,7 @@
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const onMain = () => !main.classList.contains('hidden');
   const breathOpen = () => breathOverlay.classList.contains('on');
+  const overlayOpen = () => !!document.querySelector('.overlay.on');
 
   // restart a CSS animation even if the class is already there
   function replay(el, cls) {
@@ -1533,6 +1863,7 @@
       note.textContent = text;
       note.classList.toggle('secret', kind === 'pink');
       note.classList.toggle('case', kind === 'case');
+      note.classList.toggle('his', kind === 'his');
       note.classList.add('show');
     }, lit ? 350 : 900);
   }
@@ -1657,6 +1988,15 @@
     heartOn(3000);
   });
 
+  hisPiece.addEventListener('click', (e) => {
+    e.stopPropagation();
+    lightCandle();
+    hisPiece.classList.add('lit');
+    displayNote(hisNotes[hisIdx], 'his');
+    hisIdx = (hisIdx + 1) % hisNotes.length;
+    heartOn(3000);
+  });
+
   // ---- breathing with the axolotl ----
   function startBreathCycle() {
     clearTimeout(breathTimer);
@@ -1672,18 +2012,13 @@
 
   function openBreath() {
     lightCandle();
-    breathOverlay.classList.add('on');
-    breathOverlay.removeAttribute('inert');
-    main.setAttribute('inert', '');
+    openOverlay(breathOverlay, breathExit);
     startBreathCycle();
-    breathExit.focus({ preventScroll: true });
   }
 
   function closeBreath() {
     if (!breathOpen()) return;
-    breathOverlay.classList.remove('on');
-    breathOverlay.setAttribute('inert', '');
-    main.removeAttribute('inert');
+    closeOverlay(breathOverlay);
     clearTimeout(breathTimer);
     displayNote(notes[2], false);
     scene.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' });
@@ -1695,6 +2030,308 @@
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBreath(); }
   });
   breathExit.addEventListener('click', closeBreath);
+
+  // ---- full-screen overlays share one open/close ----
+  function openOverlay(el, focusEl) {
+    el.classList.add('on');
+    el.removeAttribute('inert');
+    main.setAttribute('inert', '');
+    focusEl.focus({ preventScroll: true });
+  }
+
+  function closeOverlay(el, returnFocusEl) {
+    el.classList.remove('on');
+    el.setAttribute('inert', '');
+    main.removeAttribute('inert');
+    if (returnFocusEl) returnFocusEl.focus({ preventScroll: true });
+  }
+
+  // ---- keepsakes: the pottery place opens once the case is closed ----
+  function unlockKeepsakes() {
+    keepsakes.hidden = false;
+    paintBtn.hidden = !(stored(DATE_SEEN_KEY) || stored(GLAZE_KEY));
+    requestAnimationFrame(() => keepsakes.classList.add('on'));
+  }
+
+  function stored(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+
+  function store(key, value) {
+    try {
+      if (value === null) localStorage.removeItem(key);
+      else localStorage.setItem(key, value);
+    } catch (e) { /* private mode: just not remembered */ }
+  }
+
+  // ---- little pottery drawings for the chapter ----
+  let potId = 0;
+
+  function potSVG(o) {
+    const id = 'pot' + (++potId);
+    const x = o.x || 0;
+    const body = 'M' + (x + 18) + ' 60 Q' + (x + 18) + ' 56 ' + (x + 22) + ' 56 H' + (x + 98) + ' Q' + (x + 102) + ' 56 ' + (x + 102) + ' 60 C' + (x + 102) + ' 88 ' + (x + 84) + ' 108 ' + (x + 60) + ' 108 C' + (x + 36) + ' 108 ' + (x + 18) + ' 88 ' + (x + 18) + ' 60 Z';
+    let out = '<defs><clipPath id="' + id + 'c"><path d="' + body + '"/></clipPath>' +
+      '<pattern id="' + id + 'p" width="11" height="7" patternUnits="userSpaceOnUse">' +
+      '<circle cx="5.5" cy="0" r="2.6" fill="' + (o.spots || 'none') + '"/>' +
+      '<circle cx="0" cy="3.5" r="2.6" fill="' + (o.spots || 'none') + '"/>' +
+      '<circle cx="11" cy="3.5" r="2.6" fill="' + (o.spots || 'none') + '"/></pattern></defs>';
+    if (o.candle) {
+      if (o.lit) {
+        out += '<circle cx="' + (x + 60) + '" cy="10" r="34" fill="url(#chapterGlow)"/>' +
+          '<path d="M' + (x + 60) + ' -4 C' + (x + 66) + ' 4 ' + (x + 67) + ' 10 ' + (x + 60) + ' 15 C' + (x + 53) + ' 10 ' + (x + 54) + ' 4 ' + (x + 60) + ' -4 Z" fill="#ffc97a"/>';
+      }
+      out += '<rect x="' + (x + 59) + '" y="14" width="2" height="7" rx="1" fill="#4a3a45"/>' +
+        '<rect x="' + (x + 47) + '" y="20" width="26" height="38" rx="3" fill="#fdf3e3"/>';
+    }
+    out += '<path d="' + body + '" fill="' + o.body + '"/>';
+    if (o.spots) out += '<rect x="' + x + '" y="50" width="120" height="60" fill="url(#' + id + 'p)" clip-path="url(#' + id + 'c)"/>';
+    out += '<ellipse cx="' + (x + 60) + '" cy="57" rx="44" ry="5" fill="' + o.rim + '"/>';
+    if (o.patch) out += '<ellipse cx="' + (x + 38) + '" cy="72" rx="12" ry="8" transform="rotate(-12 ' + (x + 38) + ' 72)" fill="' + o.patch + '"/>';
+    return out;
+  }
+
+  const BISQUE = { body: '#e6ddd0', rim: '#efe8dd' };
+  const HERS = { body: '#f0adbb', rim: '#fac9d3', spots: 'rgba(197,109,131,0.35)', patch: '#ffd3dc', candle: true };
+  const HIS = { body: '#1f2d5c', rim: '#34498a', spots: null, patch: null };
+
+  function svgWrap(inner, viewBox) {
+    return '<svg viewBox="' + (viewBox || '0 -12 240 126') + '" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><radialGradient id="chapterGlow"><stop offset="0" stop-color="rgba(255,201,122,0.5)"/>' +
+      '<stop offset="1" stop-color="rgba(255,201,122,0)"/></radialGradient></defs>' + inner + '</svg>';
+  }
+
+  function paintPots() {
+    const colours = ['#f5b8c4', '#ffd3dc', '#fff6ea', '#1f2d5c', '#ffc97a', '#9db59a'];
+    return colours.map((c, i) => {
+      const cx = 30 + i * 36;
+      const cy = 38 + (i % 2) * 14;
+      return '<rect x="' + (cx - 13) + '" y="' + cy + '" width="26" height="28" rx="5" fill="rgba(255,246,234,0.14)"/>' +
+        '<ellipse cx="' + cx + '" cy="' + (cy + 2) + '" rx="11" ry="4" fill="' + c + '"/>';
+    }).join('');
+  }
+
+  function brush(x, y) {
+    return '<g transform="rotate(-38 ' + x + ' ' + y + ')">' +
+      '<rect x="' + (x - 2.5) + '" y="' + (y - 64) + '" width="5" height="48" rx="2.5" fill="#c9a37a"/>' +
+      '<rect x="' + (x - 3.2) + '" y="' + (y - 18) + '" width="6.4" height="7" fill="#a8a9b4"/>' +
+      '<path d="M' + (x - 3.2) + ' ' + (y - 11) + ' Q' + x + ' ' + (y + 4) + ' ' + (x + 3.2) + ' ' + (y - 11) + ' Z" fill="#ffd3dc"/></g>';
+  }
+
+  function laughs() {
+    const has = [[70, 40, -12, 30], [128, 22, 8, 38], [176, 58, -4, 26], [100, 92, 10, 24]];
+    return has.map(([x, y, r, size]) =>
+      '<text x="' + x + '" y="' + y + '" transform="rotate(' + r + ' ' + x + ' ' + y + ')" font-family="Caveat, cursive" font-size="' + size + '" fill="#f5b8c4">ha</text>'
+    ).join('') +
+      '<text x="40" y="92" font-size="14" fill="#ffc97a">✦</text><text x="196" y="22" font-size="12" fill="#ffc97a">✦</text>';
+  }
+
+  // the story of the first date. every line here is editable: it's his voice.
+  const chapterScenes = [
+    {
+      art: () => svgWrap(potSVG(Object.assign({ x: -4 }, BISQUE)) + potSVG(Object.assign({ x: 124 }, BISQUE))),
+      line: 'july 2026. a pottery place, and two plain pieces waiting to become something.'
+    },
+    {
+      art: () => svgWrap(paintPots()),
+      line: 'you took ages deciding which colours to use. i didn’t mind. i liked watching you decide.'
+    },
+    {
+      art: () => svgWrap(potSVG(Object.assign({ x: 60 }, HERS, { candle: false })) + brush(106, 64)),
+      line: 'then one tiny section. you worked on it forever, slow and careful. it came out perfect.'
+    },
+    {
+      art: () => svgWrap(potSVG(Object.assign({ x: 60 }, HIS))),
+      line: 'i painted mine dark blue. honestly, i was mostly watching yours.'
+    },
+    {
+      art: () => svgWrap(laughs()),
+      line: 'somewhere in there you laughed. i still hear it at random hours.'
+    },
+    {
+      art: () => svgWrap(potSVG(Object.assign({ x: -4 }, HERS, { lit: true })) + potSVG(Object.assign({ x: 124 }, HIS))),
+      line: 'that’s where this page started. all of it grew out of that date.'
+    },
+    {
+      art: () => svgWrap(potSVG(Object.assign({ x: 60 }, BISQUE)) + brush(112, 60)),
+      line: 'so here’s a fresh one. your turn again.',
+      final: true
+    }
+  ];
+
+  let chapterIdx = 0;
+
+  chapterDots.innerHTML = chapterScenes.map(() => '<span></span>').join('');
+
+  function showScene(i) {
+    chapterIdx = clamp(i, 0, chapterScenes.length - 1);
+    const sc = chapterScenes[chapterIdx];
+    chapterArt.innerHTML = sc.art();
+    chapterLine.textContent = sc.line;
+    replay(chapterArt, 'turn');
+    Array.from(chapterDots.children).forEach((d, j) => d.classList.toggle('on', j === chapterIdx));
+    chapterPrev.disabled = chapterIdx === 0;
+    chapterNext.textContent = sc.final ? 'paint it' : 'next';
+    if (sc.final) {
+      store(DATE_SEEN_KEY, '1');
+      paintBtn.hidden = false;
+    }
+  }
+
+  function openChapter() {
+    showScene(0);
+    openOverlay(chapter, chapterNext);
+  }
+
+  function closeChapter() {
+    closeOverlay(chapter, doorBtn);
+  }
+
+  doorBtn.addEventListener('click', openChapter);
+  chapterPrev.addEventListener('click', () => showScene(chapterIdx - 1));
+  chapterNext.addEventListener('click', () => {
+    if (chapterScenes[chapterIdx].final) {
+      closeOverlay(chapter);
+      openStudio();
+    } else {
+      showScene(chapterIdx + 1);
+    }
+  });
+  chapterExit.addEventListener('click', closeChapter);
+  chapter.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' && !chapterScenes[chapterIdx].final) { e.preventDefault(); showScene(chapterIdx + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); showScene(chapterIdx - 1); }
+  });
+
+  // ---- the studio: repaint her candle holder ----
+  const glazes = [
+    { name: 'her july pink', c: '#f5b8c4' },
+    { name: 'blush', c: '#ffd3dc' },
+    { name: 'candle glow', c: '#ffc97a' },
+    { name: 'cinnamon', c: '#b5652b' },
+    { name: 'corn snake', c: '#e0703a' },
+    { name: 'sage', c: '#9db59a' },
+    { name: 'lavender', c: '#b9a7d6' },
+    { name: 'his dark blue', c: '#1f2d5c' },
+    { name: 'kingsnake cream', c: '#fff6ea' },
+    { name: 'kingsnake black', c: '#2e2a33' }
+  ];
+
+  // her original, exactly as the css draws it
+  const ORIGINAL_VARS = {
+    '--glaze': '#f5b8c4', '--glaze-deep': '#e39aab', '--glaze-edge': '#d4879b',
+    '--spots': 'rgba(197,109,131,0.30)',
+    '--patch': '#ffd3dc', '--patch-2': '#fcc4d1',
+    '--rim-top': '#fac9d3', '--rim': '#e39aab'
+  };
+
+  const PART_VARS = {
+    glaze: ['--glaze', '--glaze-deep', '--glaze-edge'],
+    spots: ['--spots'],
+    patch: ['--patch', '--patch-2'],
+    rim: ['--rim-top', '--rim']
+  };
+
+  // mix a hex colour toward white (amt > 0) or black (amt < 0)
+  function shade(hex, amt) {
+    const n = parseInt(hex.slice(1), 16);
+    const t = amt < 0 ? 0 : 255;
+    const a = Math.abs(amt);
+    const ch = (v) => Math.round(v + (t - v) * a);
+    return 'rgb(' + ch(n >> 16) + ',' + ch((n >> 8) & 255) + ',' + ch(n & 255) + ')';
+  }
+
+  function alpha(hex, a) {
+    const n = parseInt(hex.slice(1), 16);
+    return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
+
+  function partValues(part, hex) {
+    if (part === 'glaze') return [hex, shade(hex, -0.1), shade(hex, -0.18)];
+    if (part === 'spots') return [alpha(hex, 0.5)];
+    if (part === 'patch') return [hex, shade(hex, -0.05)];
+    return [shade(hex, 0.12), shade(hex, -0.08)];
+  }
+
+  // colours: { glaze, spots, patch, rim } of hex strings; missing = her original
+  function glazeVars(colours) {
+    const vars = Object.assign({}, ORIGINAL_VARS);
+    Object.keys(PART_VARS).forEach((part) => {
+      if (!colours[part]) return;
+      const vals = partValues(part, colours[part]);
+      PART_VARS[part].forEach((v, i) => { vars[v] = vals[i]; });
+    });
+    return vars;
+  }
+
+  function applyGlaze(el, colours) {
+    const vars = glazeVars(colours);
+    Object.keys(vars).forEach((v) => el.style.setProperty(v, vars[v]));
+  }
+
+  function loadGlaze() {
+    try { return JSON.parse(stored(GLAZE_KEY)) || {}; } catch (e) { return {}; }
+  }
+
+  let studioColours = {};
+  let studioPart = 'glaze';
+
+  studioSwatches.innerHTML = glazes.map((g) =>
+    '<button class="swatch" type="button" style="--c:' + g.c + '" data-c="' + g.c + '" aria-label="' + g.name + '" title="' + g.name + '" aria-pressed="false"></button>'
+  ).join('');
+  const swatchEls = Array.from(studioSwatches.children);
+  const partEls = Array.from(studioParts.children);
+
+  function syncStudio() {
+    applyGlaze(studioPiece, studioColours);
+    partEls.forEach((b) => b.setAttribute('aria-checked', b.dataset.part === studioPart ? 'true' : 'false'));
+    const current = studioColours[studioPart];
+    swatchEls.forEach((b) => b.setAttribute('aria-pressed', b.dataset.c === current ? 'true' : 'false'));
+    const g = glazes.find((x) => x.c === current);
+    swatchName.textContent = g ? g.name : 'as she painted it in july';
+  }
+
+  function openStudio() {
+    studioColours = loadGlaze();
+    studioPart = 'glaze';
+    syncStudio();
+    openOverlay(studio, partEls[0]);
+  }
+
+  function closeStudio() {
+    closeOverlay(studio, paintBtn.hidden ? doorBtn : paintBtn);
+  }
+
+  partEls.forEach((b) => b.addEventListener('click', () => {
+    studioPart = b.dataset.part;
+    syncStudio();
+  }));
+
+  swatchEls.forEach((b) => b.addEventListener('click', () => {
+    studioColours[studioPart] = b.dataset.c;
+    syncStudio();
+  }));
+
+  studioOriginal.addEventListener('click', () => {
+    studioColours = {};
+    syncStudio();
+  });
+
+  studioKeep.addEventListener('click', () => {
+    const kept = Object.keys(studioColours).length > 0;
+    store(GLAZE_KEY, kept ? JSON.stringify(studioColours) : null);
+    applyGlaze(document.documentElement, studioColours);
+    closeStudio();
+    lightCandle();
+    displayNote(kept ? 'kept. same piece, painted twice.' : 'back to july. exactly as you made it.', 'pink');
+    scene.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' });
+  });
+
+  paintBtn.addEventListener('click', openStudio);
+  studioExit.addEventListener('click', closeStudio);
+
+  // wear her latest version from the start
+  applyGlaze(document.documentElement, loadGlaze());
 
   // ---- CASE FILE #003: the vanishing dinosaurs ----
   function loadCase() {
@@ -1767,6 +2404,7 @@
       displayNote(caseVerdict, 'case');
     }, 3300);
     setTimeout(startChase, 4200);
+    setTimeout(unlockKeepsakes, 4200);
   }
 
   // pick up where the last visit left off
@@ -1776,7 +2414,10 @@
     clueEls.forEach((clue) => {
       if (found.includes(clue.dataset.clue)) markClue(clue);
     });
-    if (saved.solved || cluesFound >= clueEls.length) markSolved();
+    if (saved.solved || cluesFound >= clueEls.length) {
+      markSolved();
+      unlockKeepsakes();
+    }
   })();
 
   // ---- culprits at large: the chase ----
@@ -2168,8 +2809,8 @@
 
   function restFrame(now) {
     if (!restMode) return;
-    // with reduced motion the detective stays put; the notes still come
-    if (now > manualUntil && !reduceMotion.matches) {
+    // with reduced motion (or an overlay open) the detective stays put; the notes still come
+    if (now > manualUntil && !reduceMotion.matches && !overlayOpen()) {
       const w = window.innerWidth;
       const h = window.innerHeight;
       // slow lissajous wander, kept well inside the edges
@@ -2287,10 +2928,12 @@
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (breathOpen()) closeBreath();
+      else if (chapter.classList.contains('on')) closeChapter();
+      else if (studio.classList.contains('on')) closeStudio();
       else if (casePanel.classList.contains('open')) caseTab.click();
       return;
     }
-    if (!onMain() || breathOpen() || e.defaultPrevented) return;
+    if (!onMain() || overlayOpen() || e.defaultPrevented) return;
 
     // keyboard steering: no dragging, no reaching. only while there's something to steer
     const steer = steerKeys[e.key];
