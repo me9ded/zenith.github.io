@@ -1522,7 +1522,6 @@
   <div class="studio-parts" id="studioParts" role="radiogroup" aria-label="What to paint">
     <button class="studio-part" type="button" role="radio" aria-checked="true" data-part="glaze">the glaze</button>
     <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="spots">the scales</button>
-    <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="patch">the patch</button>
     <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="rim">the rim</button>
     <button class="studio-part" type="button" role="radio" aria-checked="false" data-part="dots">the rim&rsquo;s circles</button>
   </div>
@@ -2239,7 +2238,6 @@
   const PART_VARS = {
     glaze: ['--glaze', '--glaze-deep', '--glaze-edge'],
     spots: ['--spots'],
-    patch: ['--patch', '--patch-2'],
     rim: ['--rim-top', '--rim'],
     dots: ['--rim-dots']
   };
@@ -2261,12 +2259,11 @@
   function partValues(part, hex) {
     if (part === 'glaze') return [hex, shade(hex, -0.1), shade(hex, -0.18)];
     if (part === 'spots') return [alpha(hex, 0.5)];
-    if (part === 'patch') return [hex, shade(hex, -0.05)];
     if (part === 'dots') return [alpha(hex, 0.9)];
     return [shade(hex, 0.12), shade(hex, -0.08)];
   }
 
-  // colours: { glaze, spots, patch, rim } of hex strings; missing = her original
+  // colours: { glaze, spots, rim, dots } of hex strings; missing = her original
   function glazeVars(colours) {
     const vars = Object.assign({}, ORIGINAL_VARS);
     Object.keys(PART_VARS).forEach((part) => {
