@@ -2,1314 +2,546 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>for zenith</title>
 <meta name="description" content="a little place for heavy days: a candle, some notes, and a few dinosaurs.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#221a27">
+<meta name="theme-color" content="#1c1520">
 <meta property="og:title" content="for zenith">
 <meta property="og:description" content="in case the day feels heavy.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕯️</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Karla:wght@400;500&family=Special+Elite&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #2b2230;
-    --bg-deep: #221a27;
-    --pink: #f5b8c4;
-    --pink-deep: #e39aab;
-    --glow: #ffc97a;
-    --cream: #fff6ea;
-    --muted: #a08ba0;
-    --wick: #4a3a45;
-
-    /* her candle holder, exactly as she painted it in july (the studio can repaint it) */
-    --glaze: #f5b8c4;
-    --glaze-deep: #e39aab;
-    --glaze-edge: #d4879b;
-    --spots: rgba(197,109,131,0.30);
-    --patch: #ffd3dc;
-    --patch-2: #fcc4d1;
-    --rim-top: #fac9d3;
-    --rim: #e39aab;
-    --rim-dots: rgba(255,246,234,0.85);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html, body { height: 100%; }
-
-  body {
-    background: radial-gradient(ellipse at 50% 30%, var(--bg) 0%, var(--bg-deep) 100%);
-    color: var(--cream);
-    font-family: 'Karla', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow-x: hidden;
-    padding: 32px 20px 40px;
-    text-align: center;
-  }
-
-  header { margin-bottom: 8px; }
-
-  h1 {
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    font-size: 1.9rem;
-    letter-spacing: 0.02em;
-    color: var(--pink);
-  }
-
-  h1 em { font-style: italic; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-  h1 em:active { color: var(--glow); }
-
-  .sub {
-    margin-top: 10px;
-    font-size: 0.85rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .scene {
-    position: relative;
-    margin: 28px 0 10px;
-    width: 240px;
-    height: 300px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    border: none;
-    background: none;
-    outline-offset: 8px;
-    overflow: visible;
-  }
-
-  .scene:focus-visible { outline: 2px solid var(--pink); border-radius: 16px; }
-
-  .glow {
-    position: absolute;
-    z-index: 0;
-    left: 50%; top: 30%;
-    width: 340px; height: 340px;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(255,201,122,0.35) 0%, rgba(255,201,122,0.12) 40%, transparent 70%);
-    opacity: 0;
-    transition: opacity 1.2s ease;
-    pointer-events: none;
-  }
-
-  .lit .glow {
-    opacity: 1;
-    animation: breathe 10s ease-in-out infinite;
-  }
-
-  @keyframes breathe {
-    0%   { transform: translate(-50%, -50%) scale(0.9); }
-    40%  { transform: translate(-50%, -50%) scale(1.08); }
-    100% { transform: translate(-50%, -50%) scale(0.9); }
-  }
-
-  .flame {
-    position: absolute;
-    z-index: 5;
-    left: 50%; bottom: 208px;
-    width: 22px; height: 42px;
-    transform: translateX(-50%) scale(0);
-    transform-origin: bottom center;
-    background: radial-gradient(ellipse at 50% 80%, #fff3d6 0%, var(--glow) 45%, #f08a3c 80%, transparent 100%);
-    border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
-    filter: blur(0.5px);
-    transition: transform 0.6s cubic-bezier(.34,1.56,.64,1);
-    pointer-events: none;
-  }
-
-  .lit .flame {
-    transform: translateX(-50%) scale(1);
-    animation: flicker 2.4s ease-in-out infinite;
-  }
-
-  @keyframes flicker {
-    0%, 100% { transform: translateX(-50%) scale(1) rotate(-1.5deg); }
-    25%      { transform: translateX(-52%) scale(1.05, 0.96) rotate(1deg); }
-    50%      { transform: translateX(-49%) scale(0.97, 1.04) rotate(-1deg); }
-    75%      { transform: translateX(-51%) scale(1.02) rotate(1.5deg); }
-  }
-
-  /* invisible tap target over the flame, active only when lit */
-  .flame-tap {
-    position: absolute;
-    z-index: 2;
-    left: 50%; bottom: 196px;
-    width: 76px; height: 84px;
-    transform: translateX(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .lit .flame-tap { display: block; }
-  .flame-tap:focus-visible { outline: 1px dashed rgba(255,201,122,0.5); border-radius: 50%; }
-
-
-  .wick {
-    position: absolute;
-    z-index: 4;
-    left: 50%; bottom: 200px;
-    width: 3px; height: 12px;
-    transform: translateX(-50%);
-    background: var(--wick);
-    border-radius: 2px;
-  }
-
-  .candle {
-    position: absolute;
-    z-index: 3;
-    left: 50%; bottom: 110px;
-    width: 58px; height: 92px;
-    transform: translateX(-50%);
-    background: linear-gradient(180deg, #fdf3e3 0%, #f3e2cc 100%);
-    border-radius: 8px 8px 4px 4px;
-  }
-
-  .candle::before {
-    content: "";
-    position: absolute;
-    top: -4px; left: 0; right: 0;
-    height: 10px;
-    background: #fff8ec;
-    border-radius: 50%;
-  }
-
-  .holder {
-    position: absolute;
-    z-index: 2;
-    left: 50%; bottom: 24px;
-    width: 150px; height: 96px;
-    transform: translateX(-50%);
-    background:
-      radial-gradient(circle at 11px 0px, var(--spots) 0 5px, transparent 6px) 0 0 / 22px 14px repeat,
-      radial-gradient(circle at 11px 0px, var(--spots) 0 5px, transparent 6px) 11px 7px / 22px 14px repeat,
-      linear-gradient(160deg, var(--glaze) 0%, var(--glaze-deep) 78%, var(--glaze-edge) 100%);
-    border-radius: 14px 14px 60px 60px / 14px 14px 78px 78px;
-    box-shadow: inset 0 -12px 24px rgba(0,0,0,0.18), inset 8px 6px 14px rgba(255,255,255,0.28);
-  }
-
-  .holder::after {
-    content: "";
-    position: absolute;
-    top: 16px; left: 22px;
-    width: 44px; height: 30px;
-    background: linear-gradient(140deg, var(--patch) 0%, var(--patch-2) 100%);
-    border-radius: 60% 45% 55% 50% / 55% 60% 45% 55%;
-    opacity: 0.9;
-  }
-
-  .holder-rim {
-    position: absolute;
-    z-index: 4;
-    left: 50%; bottom: 112px;
-    width: 162px; height: 18px;
-    transform: translateX(-50%);
-    /* the rim: the part she spent forever on, small circles all the way round */
-    background:
-      radial-gradient(circle, var(--rim-dots) 0 2px, transparent 2.6px) 3px 50% / 11px 100% repeat-x,
-      linear-gradient(180deg, var(--rim-top) 0%, var(--rim) 100%);
-    border-radius: 50%;
-  }
-
-  /* ---------- his piece, keeping hers company ---------- */
-  .his-piece {
-    position: absolute;
-    z-index: 3;
-    right: -98px;
-    bottom: 2px;
-    padding: 4px;
-    background: none;
-    border: 0;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25));
-  }
-  .his-piece svg { display: block; overflow: visible; }
-  .his-piece:focus-visible { outline: 1px dashed rgba(179,195,242,0.6); border-radius: 12px; }
-  .his-piece .his-flame, .his-piece .his-glow {
-    opacity: 0;
-    transform-box: fill-box;
-    transform-origin: center bottom;
-    transition: opacity 0.8s ease;
-  }
-  .his-piece.lit .his-flame { opacity: 1; animation: hisFlicker 2.1s ease-in-out infinite; }
-  .his-piece.lit .his-glow { opacity: 1; }
-  @keyframes hisFlicker {
-    0%, 100% { transform: scale(1) rotate(-2deg); }
-    50%      { transform: scale(0.94, 1.06) rotate(2deg); }
-  }
-  @media (max-width: 640px) {
-    .his-piece { right: -72px; bottom: 6px; }
-    .his-piece svg { width: 54px; height: auto; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .his-piece.lit .his-flame { animation: none; }
-  }
-
-  /* ---------- critters ---------- */
-  .critter { position: absolute; pointer-events: none; }
-
-  .tarantula {
-    top: 0; right: 10px;
-    display: flex; flex-direction: column; align-items: center;
-    animation: hangbob 4s ease-in-out infinite;
-  }
-  .tarantula .thread { width: 1.5px; height: 64px; background: rgba(255,246,234,0.22); }
-  @keyframes hangbob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
-
-  .dog {
-    bottom: 2px;
-    animation: dance 1.6s ease-in-out infinite;
-    transform-origin: bottom center;
-  }
-  .chihuahua { left: -6px; }
-  .corgi { right: -14px; animation-delay: 0.4s; }
-
-  /* ---------- the culprits in hiding (--dir: -1 faces left, 1 faces right) ---------- */
-  .hideaway {
-    --stalk-x: 0px;
-    --stalk-y: 0px;
-    --dir: 1;
-    position: absolute;
-    top: 6px;
-    width: 132px;
-    height: 118px;
-    pointer-events: none;
-    overflow: visible;
-    z-index: 1;
-    transform: translate(var(--stalk-x), var(--stalk-y));
-    transition: transform 140ms ease-out, opacity 180ms ease;
-  }
-  .hideaway::before {
-    content: "";
-    position: absolute;
-    border-radius: 55% 45% 58% 42% / 50% 44% 56% 50%;
-    opacity: 0.9;
-    pointer-events: none;
-  }
-  .hideaway-spino { --dir: -1; right: max(8px, 4vw); }
-  .hideaway-spino::before {
-    inset: 8px 0 8px 4px;
-    background: radial-gradient(circle at 60% 50%, rgba(245,184,196,0.10) 0%, rgba(245,184,196,0.05) 45%, transparent 72%);
-  }
-  .hideaway-cerato { --dir: 1; left: max(8px, 4vw); }
-  .hideaway-cerato::before {
-    inset: 8px 4px 8px 0;
-    background: radial-gradient(circle at 40% 50%, rgba(245,184,196,0.10) 0%, rgba(245,184,196,0.05) 45%, transparent 72%);
-  }
-  .hideaway.stalking { opacity: 1; }
-  .hideaway.undercover {
-    opacity: 0 !important;
-    transform: translate(0, -8px) !important;
-    transition: opacity 900ms ease, transform 900ms ease;
-  }
-
-  .dino-pal {
-    --peek-y: 0px;
-    --peek-rot: 0deg;
-    position: absolute;
-    bottom: 2px;
-    transform: translateY(var(--peek-y)) scaleX(var(--dir)) rotate(var(--peek-rot));
-    transform-origin: center bottom;
-    transition: transform 140ms ease-out, opacity 180ms ease, filter 180ms ease;
-    pointer-events: none;
-    opacity: 0.74;
-    z-index: 2;
-  }
-  .hideaway-spino .dino-pal { right: 4px; }
-  .hideaway-cerato .dino-pal { left: 2px; bottom: 1px; }
-  .hideaway.stalking .dino-pal { opacity: 0.92; }
-
-  .dino-image {
-    display: block;
-    width: auto;
-    height: 72px;
-    max-width: none;
-    user-select: none;
-    -webkit-user-drag: none;
-    pointer-events: none;
-    filter: grayscale(1) sepia(0.42) hue-rotate(284deg) saturate(0.72) brightness(1.12) contrast(0.96) drop-shadow(0 2px 4px rgba(0,0,0,0.10));
-  }
-  .hideaway-cerato .dino-image { height: 74px; }
-  .hideaway.stalking .dino-image {
-    filter: grayscale(1) sepia(0.42) hue-rotate(284deg) saturate(0.9) brightness(1.16) contrast(1) drop-shadow(0 3px 6px rgba(0,0,0,0.14));
-  }
-
-  .feet-tap {
-    position: absolute;
-    bottom: -4px;
-    border: 0;
-    padding: 0;
-    margin: 0;
-    background: transparent;
-    cursor: pointer;
-    pointer-events: auto;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    z-index: 3;
-  }
-  .hideaway-spino .feet-tap { left: 36%; width: 38%; height: 46%; }
-  .hideaway-cerato .feet-tap { left: 28%; width: 45%; height: 44%; }
-  .feet-tap:focus-visible {
-    outline: 2px dashed rgba(245, 184, 196, 0.7);
-    outline-offset: 2px;
-    border-radius: 50%;
-  }
-  .hideaway.undercover .feet-tap { pointer-events: none !important; }
-
-  .dino-pal.scare {
-    animation: dinoJumpscare 1.05s cubic-bezier(.24,.9,.2,1) forwards;
-    transition: none;
-    opacity: 1;
-    z-index: 12;
-  }
-  @keyframes dinoJumpscare {
-    0%   { transform: translate(0,0) scaleX(var(--dir)) scale(1) rotate(0deg); }
-    20%  { transform: translate(calc(var(--dir) * 4px),-4px) scaleX(var(--dir)) scale(1.04) rotate(calc(var(--dir) * 2deg)); }
-    55%  { transform: translate(calc(var(--dir) * 42px),-74px) scaleX(var(--dir)) scale(1.60) rotate(calc(var(--dir) * 8deg)); }
-    80%  { transform: translate(calc(var(--dir) * 34px),-66px) scaleX(var(--dir)) scale(1.46) rotate(calc(var(--dir) * 6deg)); }
-    100% { transform: translate(0,0) scaleX(var(--dir)) scale(1) rotate(0deg); }
-  }
-
-  .dino-rawr {
-    position: absolute;
-    bottom: 92px;
-    transform: scale(0.8);
-    font-size: 0.92rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: rgba(255,246,234,0.95);
-    text-shadow: 0 2px 10px rgba(0,0,0,0.18);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 13;
-  }
-  .hideaway-spino .dino-rawr { right: 22px; }
-  .hideaway-cerato .dino-rawr { left: 20px; }
-  .dino-rawr.show { animation: rawrPop 0.9s ease forwards; }
-  @keyframes rawrPop {
-    0%   { opacity: 0; transform: translateY(10px) scale(0.6); }
-    30%  { opacity: 1; transform: translateY(-10px) scale(1.05); }
-    65%  { opacity: 1; transform: translateY(-18px) scale(1); }
-    100% { opacity: 0; transform: translateY(-24px) scale(0.92); }
-  }
-
-  @keyframes dance {
-    0%, 100% { transform: translateY(0) rotate(-6deg); }
-    50%      { transform: translateY(-9px) rotate(6deg); }
-  }
-
-  .pond {
-    position: relative;
-    width: 100vw;
-    height: 116px;
-    margin-top: auto;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .pond * { pointer-events: none; }
-  .pond .flip {
-    pointer-events: auto;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .pond .flip:focus-visible { outline: 1px dashed rgba(245,184,196,0.6); border-radius: 12px; }
-  .swimmer {
-    position: absolute;
-    left: 0; top: 10px;
-    animation: swim 16s ease-in-out infinite alternate;
-  }
-  .swimmer .flip {
-    display: block;
-    animation: flipdir 32s steps(1) infinite, bob 3s ease-in-out infinite;
-  }
-  @keyframes swim { from { transform: translateX(2vw); } to { transform: translateX(calc(98vw - 100px)); } }
-  @keyframes flipdir { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(-1); } }
-  @keyframes bob { 0%,100% { translate: 0 0; } 50% { translate: 0 -6px; } }
-
-  @media (max-width: 640px) {
-    .hideaway { top: -2px; width: 106px; height: 96px; }
-    .hideaway-spino { right: 4px; }
-    .hideaway-cerato { left: 4px; }
-    .hideaway-spino .dino-image, .hideaway-cerato .dino-image { height: 58px; }
-    .dino-rawr { bottom: 72px; font-size: 0.8rem; }
-    .hideaway-spino .dino-rawr { right: 12px; }
-    .hideaway-cerato .dino-rawr { left: 12px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .tarantula, .dog, .swimmer, .swimmer .flip { animation: none; }
-    .hideaway, .dino-pal { transition: none; }
-    .dino-pal.scare { animation-duration: 0.01s; }
-  }
-
-  .snake { position: absolute; pointer-events: none; }
-
-  /* corn snake draped along the holder rim */
-  .corn {
-    bottom: 118px; left: 50%;
-    z-index: 5;
-    transform: translateX(-50%);
-    animation: sway 5s ease-in-out infinite;
-  }
-  @keyframes sway { 0%,100% { transform: translateX(-52%);} 50% { transform: translateX(-48%);} }
-
-  /* kingsnake coiled at the left front of the holder */
-  .king { bottom: 16px; left: 28px; animation: coilbob 6s ease-in-out infinite; }
-
-  /* ball python coiled at the right front */
-  .ball { bottom: 14px; right: 30px; animation: coilbob 7s ease-in-out infinite reverse; }
-
-  @keyframes coilbob { 0%,100% { transform: rotate(-2deg);} 50% { transform: rotate(2deg);} }
-
-  @media (prefers-reduced-motion: reduce) { .snake { animation: none; } }
-
-  .hint2 { margin-top: 6px; opacity: 0.75; }
-  .hint {
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    transition: opacity 0.8s ease;
-    min-height: 1.2em;
-  }
-
-  .note-area {
-    position: relative;
-    z-index: 2;
-    max-width: 480px;
-    width: 100%;
-    min-height: 190px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    margin-top: 18px;
-  }
-
-  .note {
-    font-family: 'Caveat', cursive;
-    font-weight: 500;
-    font-size: 1.85rem;
-    line-height: 1.35;
-    color: var(--cream);
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 1s ease, transform 1s ease;
-    padding: 0 8px;
-  }
-
-  .note.show { opacity: 1; transform: translateY(0); }
-  .note.secret { color: var(--pink); }
-  .note.his { color: #b3c3f2; }
-  .note.case {
-    font-family: 'Special Elite', monospace;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: var(--glow);
-    text-align: left;
-    white-space: pre-line;
-  }
-
-  .pill {
-    background: none;
-    border: 1px solid rgba(245,184,196,0.45);
-    color: var(--pink);
-    font-family: 'Karla', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 10px 22px;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: background 0.25s ease, color 0.25s ease;
-  }
-
-  .pill:hover, .pill:focus-visible { background: var(--pink); color: var(--bg-deep); outline: none; }
-
-
-  .intro {
-    max-width: 420px;
-    margin-top: 10vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 28px;
-    transition: opacity 0.6s ease;
-  }
-  .intro-text {
-    font-size: 0.95rem;
-    line-height: 2;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-  }
-  .intro-text b { color: var(--pink); font-weight: 500; }
-  .pill.start {
-    text-transform: none;
-    letter-spacing: 0.05em;
-    font-size: 1rem;
-    padding: 13px 26px;
-  }
-  .main {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    flex: 1;
-  }
-  .main.hidden { display: none; }
-
-
-  /* ---------- full-screen overlays: breathing, the pottery place, the studio ---------- */
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--bg-deep);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 30; /* above the fixed buttons: nothing but the overlay */
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1s ease;
-  }
-
-  .overlay.on { opacity: 1; pointer-events: auto; }
-
-  .breath-glow {
-    width: 220px; height: 220px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,201,122,0.5) 0%, rgba(245,184,196,0.25) 55%, transparent 75%);
-    transform: scale(0.7);
-  }
-
-  .breath-overlay.on .breath-glow {
-    animation: breathBig 10s ease-in-out infinite;
-  }
-
-  @keyframes breathBig {
-    0%   { transform: scale(0.7); }
-    40%  { transform: scale(1.25); }
-    100% { transform: scale(0.7); }
-  }
-
-  .breath-text {
-    margin-top: 48px;
-    font-family: 'Fraunces', serif;
-    font-size: 1.4rem;
-    color: var(--cream);
-    min-height: 1.6em;
-    letter-spacing: 0.04em;
-  }
-
-  .breath-sub {
-    margin-top: 10px;
-    font-size: 0.8rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .breath-exit {
-    position: absolute;
-    bottom: 40px;
-    background: none;
-    border: none;
-    color: rgba(160,139,160,0.7);
-    font-family: 'Karla', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    padding: 12px 20px;
-  }
-  .breath-exit:hover, .breath-exit:focus-visible { color: var(--cream); outline: none; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .lit .glow, .lit .flame, .breath-overlay.on .breath-glow { animation: none; }
-    .note, .pill, .glow, .flame { transition-duration: 0.2s; }
-  }
-
-  /* ---------- keepsakes: unlocked once the case is solved ---------- */
-  .keepsakes {
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 4px 0 18px;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 1.2s ease, transform 1.2s ease;
-  }
-  .keepsakes.on { opacity: 1; transform: none; }
-  .keepsakes[hidden] { display: none; }
-  .keepsake {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 9px 16px 9px 12px;
-    background: rgba(255,201,122,0.06);
-    border: 1px solid rgba(255,201,122,0.3);
-    border-radius: 999px;
-    color: var(--glow);
-    font-family: 'Special Elite', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition: background 0.25s ease;
-  }
-  .keepsake svg { display: block; flex: none; }
-  .keepsake:hover, .keepsake:focus-visible { background: rgba(255,201,122,0.16); outline: none; }
-  .keepsake[hidden] { display: none; }
-
-  /* ---------- the pottery place: a short chapter about the first date ---------- */
-  .chapter, .studio {
-    justify-content: flex-start;
-    overflow-y: auto;
-    padding: max(40px, 11vh) 20px 32px;
-  }
-  .overlay-kicker {
-    font-family: 'Special Elite', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .chapter-art {
-    width: min(380px, 88vw);
-    height: 220px;
-    margin-top: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .chapter-art svg { display: block; width: 100%; height: 100%; overflow: visible; }
-  .chapter-art.turn { animation: chapterTurn 0.7s ease; }
-  @keyframes chapterTurn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: none; }
-  }
-  .chapter-line {
-    max-width: 420px;
-    min-height: 4em;
-    margin-top: 18px;
-    font-family: 'Caveat', cursive;
-    font-size: 1.75rem;
-    line-height: 1.3;
-    color: var(--cream);
-  }
-  .chapter-nav {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-top: 26px;
-  }
-  .chapter-dots { display: flex; gap: 7px; }
-  .chapter-dots span {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: rgba(160,139,160,0.35);
-    transition: background 0.3s ease;
-  }
-  .chapter-dots span.on { background: var(--pink); }
-  .chapter-nav .pill { min-width: 104px; }
-  .chapter-nav .pill:disabled { opacity: 0.3; cursor: default; background: none; color: var(--pink); }
-  .overlay-exit {
-    margin-top: 22px;
-    background: none;
-    border: none;
-    color: rgba(160,139,160,0.7);
-    font-family: 'Karla', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    padding: 12px 20px;
-  }
-  .overlay-exit:hover, .overlay-exit:focus-visible { color: var(--cream); outline: none; }
-
-  /* ---------- the studio: paint it again ---------- */
-  .studio-piece {
-    position: relative;
-    flex: none;
-    width: 240px;
-    height: 212px;
-    margin-top: 10px;
-  }
-  .studio-sub {
-    margin-top: 8px;
-    font-family: 'Caveat', cursive;
-    font-size: 1.35rem;
-    color: var(--pink);
-  }
-  .studio-parts {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 16px;
-  }
-  .studio-part {
-    padding: 7px 13px;
-    background: none;
-    border: 1px dashed rgba(245,184,196,0.4);
-    border-radius: 999px;
-    color: var(--muted);
-    font-family: 'Special Elite', monospace;
-    font-size: 0.74rem;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-  }
-  .studio-part[aria-checked="true"] { border-style: solid; border-color: var(--pink); color: var(--pink); background: rgba(245,184,196,0.1); }
-  .studio-part:focus-visible { outline: 1px dashed var(--glow); outline-offset: 2px; }
-  .studio-swatches {
-    display: grid;
-    grid-template-columns: repeat(5, 40px);
-    gap: 12px;
-    justify-content: center;
-    margin-top: 18px;
-  }
-  .swatch {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,246,234,0.18);
-    background: var(--c);
-    cursor: pointer;
-    box-shadow: inset 0 -4px 8px rgba(0,0,0,0.18), inset 3px 3px 6px rgba(255,255,255,0.22);
-    transition: transform 0.2s ease;
-  }
-  .swatch:hover { transform: scale(1.08); }
-  .swatch[aria-pressed="true"] { border-color: var(--cream); transform: scale(1.12); }
-  .swatch:focus-visible { outline: 2px dashed var(--glow); outline-offset: 3px; }
-  .swatch-name {
-    min-height: 1.4em;
-    margin-top: 12px;
-    font-family: 'Special Elite', monospace;
-    font-size: 0.74rem;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-  }
-  .studio-actions { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; justify-content: center; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .keepsakes, .chapter-art.turn { transition: none; animation: none; }
-  }
-
-  /* ---- CASE FILE #003: the vanishing dinosaurs ---- */
-  .clue {
-    position: fixed;
-    z-index: 9;
-    background: none;
-    border: 0;
-    padding: 8px;
-    cursor: pointer;
-    opacity: 0.45;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-  .clue:hover, .clue:focus-visible { opacity: 1; transform: scale(1.08); outline: none; }
-  .clue:focus-visible { outline: 1px dashed rgba(255,201,122,0.6); border-radius: 8px; }
-  .clue.found { opacity: 0; transform: scale(0.5); pointer-events: none; }
-  .clue svg { display: block; }
-
-  .clue-tracks { left: 24vw; bottom: 136px; }
-  .clue-chalk { right: 8vw; bottom: 190px; text-align: center; }
-  .chalk-label {
-    display: block;
-    margin-top: 2px;
-    font-family: 'Special Elite', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    color: rgba(255,246,234,0.55);
-  }
-  .clue-scrap { right: 6vw; top: 30vh; }
-  .scrap-paper {
-    display: block;
-    background: var(--cream);
-    color: var(--wick);
-    font-family: 'Special Elite', monospace;
-    font-size: 0.82rem;
-    letter-spacing: 0.04em;
-    padding: 9px 12px 14px;
-    transform: rotate(-7deg);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-    clip-path: polygon(0 0, 100% 0, 100% 68%, 86% 82%, 72% 68%, 56% 86%, 40% 70%, 24% 88%, 10% 72%, 0 86%);
-  }
-
-  .case-tab {
-    position: fixed;
-    left: 14px;
-    bottom: 14px;
-    z-index: 20;
-    font-family: 'Special Elite', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    color: var(--glow);
-    background: rgba(255,201,122,0.10);
-    border: 1px dashed rgba(255,201,122,0.5);
-    border-radius: 4px;
-    padding: 8px 12px;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .case-tab:hover, .case-tab:focus-visible { background: rgba(255,201,122,0.2); outline: none; }
-
-  .case-panel {
-    position: fixed;
-    left: 14px;
-    bottom: 58px;
-    z-index: 20;
-    width: min(280px, 84vw);
-    background: rgba(34,26,39,0.96);
-    border: 1px solid rgba(255,201,122,0.35);
-    border-radius: 6px;
-    padding: 14px 16px;
-    font-family: 'Special Elite', monospace;
-    font-size: 0.8rem;
-    line-height: 1.7;
-    color: var(--glow);
-    box-shadow: 0 10px 34px rgba(0,0,0,0.45);
-    display: none;
-  }
-  .case-panel.open { display: block; }
-  .case-panel .case-title { margin-bottom: 6px; }
-  .case-panel .ev { color: var(--muted); }
-  .case-panel .ev.got { color: var(--pink); }
-  .case-panel .case-hint { margin-top: 6px; color: rgba(255,246,234,0.5); font-size: 0.72rem; }
-  .case-reset {
-    margin-top: 8px;
-    padding: 0;
-    background: none;
-    border: 0;
-    font: inherit;
-    font-size: 0.7rem;
-    color: var(--muted);
-    text-decoration: underline dotted;
-    cursor: pointer;
-  }
-  .case-reset:hover, .case-reset:focus-visible { color: var(--glow); outline: none; }
-
-  .reveal-dim {
-    position: fixed;
-    inset: 0;
-    background: rgba(15,10,18,0);
-    pointer-events: none;
-    z-index: 11;
-    transition: background 0.7s ease;
-  }
-  .reveal-dim.on { background: rgba(15,10,18,0.55); }
-  .reveal-line {
-    position: fixed;
-    top: 38%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90vw;
-    text-align: center;
-    font-family: 'Special Elite', monospace;
-    font-size: 1.05rem;
-    letter-spacing: 0.1em;
-    color: var(--glow);
-    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 12;
-    transition: opacity 0.5s ease;
-  }
-  .reveal-line.on { opacity: 1; }
-
-  /* ---- culprits at large: the chase ---- */
-  .chaser {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 15;
-    cursor: pointer;
-    will-change: transform;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-  .chaser .flip { display: block; }
-  .chaser .body { display: block; transform-origin: center bottom; }
-  .chaser img {
-    display: block;
-    height: 66px;
-    width: auto;
-    max-width: none;
-    pointer-events: none;
-    user-select: none;
-    -webkit-user-drag: none;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.28));
-  }
-  .chaser.running .body { animation: chaseBob 0.38s ease-in-out infinite; }
-  @keyframes chaseBob {
-    0%, 100% { transform: translateY(0) rotate(-3deg); }
-    50%      { transform: translateY(-7px) rotate(3deg); }
-  }
-  .chaser.pop .body { animation: chaserPop 0.5s ease; }
-  @keyframes chaserPop {
-    0%   { transform: scale(1); }
-    40%  { transform: scale(1.28) rotate(-5deg); }
-    100% { transform: scale(1); }
-  }
-  .chaser .crawr {
-    position: absolute;
-    left: 50%;
-    top: -16px;
-    transform: translateX(-50%) scale(0.8);
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: rgba(255,246,234,0.95);
-    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    opacity: 0;
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  .chaser .crawr.show { animation: rawrPop 0.9s ease forwards; }
-
-  /* ---- BONK: the ankylosaurus fights back ---- */
-  .chaser .cbonk {
-    position: absolute;
-    left: 50%;
-    top: -16px;
-    transform: translateX(-50%) scale(0.8);
-    font-size: 0.88rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--pink);
-    text-shadow: 0 2px 10px rgba(0,0,0,0.25);
-    opacity: 0;
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  .chaser .cbonk.show { animation: rawrPop 0.95s ease forwards; }
-  .chaser .cstars {
-    position: absolute;
-    left: 50%;
-    top: -4px;
-    transform: translateX(-50%);
-    font-size: 0.8rem;
-    color: var(--glow);
-    text-shadow: 0 1px 8px rgba(0,0,0,0.3);
-    opacity: 0;
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  .chaser .cstars.show { animation: dizzyStars 0.95s ease forwards; }
-  @keyframes dizzyStars {
-    0%   { opacity: 0; transform: translateX(-50%) translateY(6px) rotate(0deg); }
-    25%  { opacity: 1; transform: translateX(-46%) translateY(-4px) rotate(8deg); }
-    50%  { opacity: 1; transform: translateX(-54%) translateY(-7px) rotate(-8deg); }
-    75%  { opacity: 1; transform: translateX(-47%) translateY(-9px) rotate(6deg); }
-    100% { opacity: 0; transform: translateX(-50%) translateY(-13px) rotate(0deg); }
-  }
-  .chaser.bonked .body { animation: bonkSquash 0.9s cubic-bezier(.22,.9,.3,1.1); }
-  @keyframes bonkSquash {
-    0%   { transform: scale(1,1); }
-    14%  { transform: scale(1.18,0.68) translateY(5px); }
-    38%  { transform: scale(0.9,1.1) translateY(-3px); }
-    60%  { transform: scale(1.06,0.95); }
-    100% { transform: scale(1,1); }
-  }
-  #ankyCursor.bonk svg { animation: ankyBonk 0.32s ease; }
-  @keyframes ankyBonk {
-    0%   { transform: rotate(0deg) scale(1); }
-    38%  { transform: rotate(-26deg) scale(1.08); }
-    100% { transform: rotate(0deg) scale(1); }
-  }
-
-  /* ---- containment protocol + heart cursor ---- */
-  .cage-back, .cage-front {
-    position: fixed;
-    right: 14px;
-    top: 10px;
-    pointer-events: none;
-    opacity: 0;
-    transform: translateY(-16px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
-  }
-  .cage-back { z-index: 13; }
-  .cage-front { z-index: 15; }
-  .cage-back.on, .cage-front.on { opacity: 1; transform: translateY(0); }
-  #cageBack2, #cageFront2 { right: auto; left: 14px; }
-  /* the notes always outrank the paddocks */
-  .note { position: relative; z-index: 16; text-shadow: 0 1px 8px rgba(34,26,39,0.85); }
-  .cage-back svg, .cage-front svg { display: block; }
-  .chaser.caged { z-index: 14 !important; }
-  .cage-front.zap svg { animation: cageZap 0.55s ease; }
-  .cage-front.zap .zapbolt { animation: zapBolt 0.55s ease; }
-  @keyframes cageZap {
-    0%, 100% { filter: none; }
-    20%, 60% { filter: brightness(1.7) drop-shadow(0 0 8px rgba(232,193,90,0.8)); }
-    40%, 80% { filter: brightness(1.1); }
-  }
-  @keyframes zapBolt {
-    0%   { opacity: 0; }
-    25%  { opacity: 1; }
-    55%  { opacity: 0.4; }
-    75%  { opacity: 0.9; }
-    100% { opacity: 0; }
-  }
-  .cage-front.rattle { animation: cageRattle 0.32s ease; }
-  @keyframes cageRattle {
-    0%, 100% { translate: 0 0; }
-    25% { translate: -2.5px 0; }
-    50% { translate: 2.5px 0; }
-    75% { translate: -1.5px 0; }
-  }
-
-  #ankyCursor .heart-svg { display: none; }
-  #ankyCursor.heart .anky-svg { display: none; }
-  #ankyCursor.heart .heart-svg {
-    display: block;
-    width: 42px;
-    height: auto;
-    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
-    animation: heartPulse 1.6s ease-in-out infinite;
-    transform-origin: center center;
-  }
-  #ankyCursor.heart .anky-flip { transform: translate(-50%, -50%) !important; }
-  #ankyCursor.heart.waddle .heart-svg { animation: heartPulse 0.6s ease-in-out infinite; }
-  #ankyCursor.heart-pop .anky-flip { animation: heartPop 0.6s cubic-bezier(.2,1.4,.4,1); }
-  @keyframes heartPulse {
-    0%, 100% { transform: scale(1); }
-    50%      { transform: scale(1.15); }
-  }
-  @keyframes heartPop {
-    0%   { transform: translate(-50%, -50%) scale(0.2) rotate(-20deg); }
-    60%  { transform: translate(-50%, -50%) scale(1.3) rotate(6deg); }
-    100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-  }
-  #ankyCursor.heart.bonk .heart-svg { animation: ankyBonk 0.32s ease; }
-
-  /* ---- the release button (a mistake) ---- */
-  .release-btn {
-    position: fixed;
-    right: 14px;
-    top: 142px;
-    z-index: 20;
-    font-family: 'Special Elite', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
-    color: #3a3325;
-    background: #e8c15a;
-    border: 2px solid #3a3325;
-    border-radius: 6px;
-    padding: 7px 10px;
-    cursor: pointer;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-8px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-    -webkit-tap-highlight-color: transparent;
-  }
-  .release-btn.on { opacity: 1; pointer-events: auto; transform: translateY(0); }
-  .release-btn.on:hover, .release-btn.on:focus-visible { background: #f0cd6e; outline: none; }
-  .release-btn:disabled { cursor: default; }
-  .release-btn.bite1 { clip-path: polygon(0 0, 72% 0, 66% 18%, 74% 34%, 64% 52%, 72% 68%, 65% 84%, 70% 100%, 0 100%); }
-  .release-btn.bite2 { clip-path: polygon(0 0, 46% 0, 40% 16%, 48% 32%, 38% 50%, 46% 66%, 39% 82%, 44% 100%, 0 100%); }
-  .release-btn.bite3 { clip-path: polygon(0 0, 24% 0, 18% 20%, 25% 38%, 16% 56%, 23% 74%, 17% 100%, 0 100%); }
-  #releaseBtn2 { right: auto; left: 14px; }
-  #releaseBtn2.bite1 { clip-path: polygon(100% 0, 28% 0, 34% 18%, 26% 34%, 36% 52%, 28% 68%, 35% 84%, 30% 100%, 100% 100%); }
-  #releaseBtn2.bite2 { clip-path: polygon(100% 0, 54% 0, 60% 16%, 52% 32%, 62% 50%, 54% 66%, 61% 82%, 56% 100%, 100% 100%); }
-  #releaseBtn2.bite3 { clip-path: polygon(100% 0, 76% 0, 82% 20%, 75% 38%, 84% 56%, 77% 74%, 83% 100%, 100% 100%); }
-  .release-btn.eaten { opacity: 0 !important; transform: translateY(2px) scale(0.7) rotate(-6deg); transition: opacity 0.28s ease, transform 0.28s ease; }
-  .chaser.chomp .body { animation: chompLunge 0.34s ease; }
-  @keyframes chompLunge {
-    0%   { transform: none; }
-    40%  { transform: translateY(-7px) rotate(-9deg) scale(1.07); }
-    70%  { transform: translateY(2px) rotate(4deg) scale(0.97); }
-    100% { transform: none; }
-  }
-  .cage-front.open { opacity: 0.22; transform: translateY(-12px); }
-
-  /* ---- rest mode: hands-free ---- */
-  .rest-btn {
-    position: fixed;
-    right: 14px;
-    bottom: 14px;
-    z-index: 20;
-    font-family: 'Special Elite', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.06em;
-    color: var(--pink);
-    background: rgba(245,184,196,0.10);
-    border: 1px dashed rgba(245,184,196,0.55);
-    border-radius: 4px;
-    padding: 9px 13px;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-  .rest-btn:hover, .rest-btn:focus-visible { background: rgba(245,184,196,0.2); outline: none; }
-  .rest-btn.on { color: var(--glow); border-color: rgba(255,201,122,0.6); background: rgba(255,201,122,0.14); }
-  .rest-note {
-    position: fixed;
-    right: 14px;
-    bottom: 52px;
-    z-index: 20;
-    max-width: min(260px, 70vw);
-    font-family: 'Special Elite', monospace;
-    font-size: 0.7rem;
-    line-height: 1.6;
-    text-align: right;
-    color: rgba(255,246,234,0.5);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-  }
-  .rest-note.on { opacity: 1; }
-  @media (max-width: 640px) {
-    .rest-btn { font-size: 0.72rem; padding: 10px 12px; }
-  }
-
-  @media (max-width: 640px) {
-    .cage-back svg, .cage-front svg { width: 150px; }
-    .cage-back, .cage-front { right: 8px; top: 96px; }
-    #cageBack2, #cageFront2 { right: auto; left: 8px; }
-    #ankyCursor.heart .heart-svg { width: 36px; }
-    .release-btn { right: 8px; top: 206px; font-size: 0.66rem; max-width: 45vw; white-space: normal; line-height: 1.35; text-align: center; }
-    #releaseBtn2 { right: auto; left: 8px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    #ankyCursor.heart .heart-svg, #ankyCursor.heart.waddle .heart-svg,
-    .cage-front.zap svg, .cage-front.rattle { animation: none; }
-  }
-
-  @media (max-width: 640px) {
-    .chaser img { height: 52px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .chaser.running .body { animation: none; }
-    .chaser.bonked .body, .chaser .cstars.show, #ankyCursor.bonk svg { animation: none; }
-  }
-
-  /* ---- the detective is an ankylosaurus ---- */
-  .anky-hide-cursor, .anky-hide-cursor * { cursor: none !important; }
-  #ankyCursor {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 50; /* it's the cursor: always on top */
-    pointer-events: none;
-    opacity: 0;
-    will-change: transform;
-  }
-  #ankyCursor.on { opacity: 1; }
-  #ankyCursor .anky-flip {
-    display: block;
-    transform: translate(-50%, -56%) scaleX(1);
-  }
-  #ankyCursor.left .anky-flip { transform: translate(-50%, -56%) scaleX(-1); }
-  #ankyCursor svg {
-    display: block;
-    width: 62px;
-    height: auto;
-    filter: drop-shadow(0 3px 5px rgba(0,0,0,0.3));
-    transform-origin: center 70%;
-  }
-  #ankyCursor.waddle svg { animation: ankyWaddle 0.34s ease-in-out infinite; }
-  @keyframes ankyWaddle {
-    0%, 100% { transform: rotate(-4deg) translateY(0); }
-    50%      { transform: rotate(4deg) translateY(-3px); }
-  }
-  @media (max-width: 640px) {
-    #ankyCursor svg { width: 52px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    #ankyCursor.waddle svg { animation: none; }
-  }
-
-  @media (max-width: 640px) {
-    .clue-tracks { left: 26vw; bottom: 124px; }
-    .clue-chalk { right: 3vw; bottom: 150px; }
-    .clue-scrap { right: 4vw; top: 24vh; }
-    .case-panel { font-size: 0.74rem; }
-  }
-</style>
+<link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/karla.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/caveat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
 </head>
 <body>
 
-<header>
-  <h1>for <em id="nameTap">zenith</em></h1>
-  <p class="sub" id="sub">in case the day feels heavy</p>
-</header>
+<!-- ================= the cover: a letter, and one way in ================= -->
+<section class="cover" id="intro" aria-labelledby="coverTitle">
+  <div class="cover-inner">
+    <svg class="cover-candle" width="44" height="64" viewBox="0 0 44 64" aria-hidden="true">
+      <circle class="cover-candle-glow" cx="22" cy="14" r="20" fill="url(#coverGlow)"/>
+      <defs>
+        <radialGradient id="coverGlow"><stop offset="0" stop-color="rgba(255,201,122,0.55)"/><stop offset="1" stop-color="rgba(255,201,122,0)"/></radialGradient>
+      </defs>
+      <path class="cover-candle-flame" d="M22 4 C27 11 28 16 22 21 C16 16 17 11 22 4 Z" fill="#ffc97a"/>
+      <rect x="21" y="20" width="2" height="5" rx="1" fill="#4a3a45"/>
+      <rect x="13" y="24" width="18" height="26" rx="3" fill="#fdf3e3"/>
+      <path d="M5 46 H39 Q39 62 22 62 Q5 62 5 46 Z" fill="#f2b5c1"/>
+      <ellipse cx="22" cy="46" rx="17" ry="3" fill="#f7c9d3"/>
+    </svg>
+    <p class="eyebrow cover-eyebrow" data-time-sub>in case the day feels heavy</p>
+    <h1 class="cover-title" id="coverTitle">for <em>zenith</em></h1>
 
-<div class="intro" id="intro">
-  <p class="intro-text">
-    i made this little place for your heavy days.<br>
-    inside, you'll find the piece we painted on our date,<br>
-    a note from me whenever you need one,<br>
-    and a small pink lifeguard if it all gets to be a lot.<br>
-    when the candle glows, breathe with it: in for 4, out for 6.<br>
-    <b>built july 2026, after the pottery date.</b>
-  </p>
-  <button class="pill start" id="startBtn">helping to de-stress my cutie</button>
-</div>
+    <div class="letter">
+      <p>i made this little place for your heavy days.</p>
+      <p>inside, you'll find the piece we painted on our date, a note from me whenever you need one, and a small pink lifeguard if it all gets to be a lot.</p>
+      <p>when the candle glows, breathe with it: in for 4, out for 6.</p>
+      <p class="letter-sign">built july 2026, after the pottery date.</p>
+    </div>
+
+    <button class="btn btn-primary btn-lg" id="startBtn" type="button">helping to de-stress my cutie <span class="btn-arrow" aria-hidden="true">&rarr;</span></button>
+  </div>
+</section>
 
 <div class="main hidden" id="main">
 
-<!-- CASE FILE #003: the vanishing dinosaurs -->
-<button class="clue clue-tracks" data-clue="tracks" type="button" aria-label="Examine the suspicious footprints">
-  <svg width="92" height="58" viewBox="0 0 92 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g stroke="rgba(245,184,196,0.6)" stroke-width="2.4" stroke-linecap="round">
-      <path d="M10 48 l-5 -8 M10 48 l0 -10 M10 48 l5 -8"/>
-      <path d="M38 33 l-5 -8 M38 33 l0 -10 M38 33 l5 -8"/>
-      <path d="M68 18 l-5 -8 M68 18 l0 -10 M68 18 l5 -8"/>
-    </g>
-  </svg>
-</button>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="wordmark" href="#top" aria-label="for zenith, back to the top">
+        <svg width="14" height="20" viewBox="0 0 14 20" aria-hidden="true"><path d="M7 1 C9.5 4.5 10 6.5 7 9 C4 6.5 4.5 4.5 7 1 Z" fill="#ffc97a"/><rect x="3.5" y="9" width="7" height="10" rx="1.5" fill="#fdf3e3"/></svg>
+        <span>for zenith</span>
+      </a>
+      <nav class="nav" aria-label="Sections">
+        <a href="#notes">notes</a>
+        <a href="#breathe">breathe</a>
+        <a href="#case">case</a>
+        <a href="#rest">rest</a>
+      </nav>
+    </div>
+  </header>
 
-<button class="clue clue-scrap" data-clue="scrap" type="button" aria-label="Examine the torn note">
-  <span class="scrap-paper">RAW&mdash;</span>
-</button>
+  <main>
 
-<button class="clue clue-chalk" data-clue="chalk" type="button" aria-label="Examine the chalk outline">
-  <svg width="70" height="66" viewBox="0 0 70 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="35" cy="32" r="22" stroke="rgba(255,246,234,0.5)" stroke-width="2" stroke-dasharray="5 5"/>
-    <path d="M49 15 a11 11 0 0 0 8 13" stroke="rgba(255,246,234,0.5)" stroke-width="2" stroke-dasharray="4 4"/>
-    <circle cx="28" cy="27" r="2.2" fill="rgba(255,246,234,0.4)"/>
-    <circle cx="39" cy="39" r="2.2" fill="rgba(255,246,234,0.4)"/>
-    <circle cx="29" cy="40" r="2.2" fill="rgba(255,246,234,0.4)"/>
-  </svg>
-  <span class="chalk-label">the victim</span>
-</button>
+    <!-- ================= hello: what sounds good right now? ================= -->
+    <section class="sec welcome" id="top" aria-labelledby="helloTitle">
+      <div class="sec-head reveal">
+        <p class="eyebrow" data-time-sub>in case the day feels heavy</p>
+        <h1 class="hello" id="helloTitle">for <button class="name-tap" id="nameTap" type="button">zenith</button></h1>
+        <p class="lede">no rush, and nothing to finish. what sounds good right now?</p>
+      </div>
 
-<button class="case-tab" id="caseTab" type="button" aria-expanded="false" aria-controls="casePanel">case #003 &#128269;</button>
-<div class="case-panel" id="casePanel" aria-live="polite">
-  <div class="case-title">CASE FILE #003<br>the vanishing dinosaurs</div>
-  <div id="caseStatus">STATUS: open. two suspects unaccounted for.</div>
-  <div class="ev" data-ev="tracks">&#9633; suspicious footprints</div>
-  <div class="ev" data-ev="scrap">&#9633; a torn confession</div>
-  <div class="ev" data-ev="chalk">&#9633; the victim (one cookie)</div>
-  <div class="case-hint">find all three, detective.</div>
-  <button class="case-reset" id="caseReset" type="button" hidden>reopen the case</button>
+      <div class="choices reveal">
+        <button class="choice choice-candle" type="button" data-go="notes">
+          <svg class="choice-art" width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="14" r="13" fill="rgba(255,201,122,0.22)"/>
+            <path d="M24 6 C28 11 28.5 14.5 24 18 C19.5 14.5 20 11 24 6 Z" fill="#ffc97a"/>
+            <rect x="18" y="19" width="12" height="15" rx="2" fill="#fdf3e3"/>
+            <path d="M9 32 H39 Q39 45 24 45 Q9 45 9 32 Z" fill="#f2b5c1"/>
+            <ellipse cx="24" cy="32" rx="15" ry="2.6" fill="#f7c9d3"/>
+          </svg>
+          <span class="choice-title">a little reassurance</span>
+          <span class="choice-desc">light the candle you painted. a note from me, every time.</span>
+          <span class="choice-cta">light it <span aria-hidden="true">&rarr;</span></span>
+        </button>
+
+        <button class="choice choice-breathe" type="button" data-go="breathe">
+          <svg class="choice-art" width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(242,181,193,0.35)" stroke-width="1.5"/>
+            <circle cx="24" cy="24" r="13" fill="rgba(242,181,193,0.16)"/>
+            <g transform="translate(9 16) scale(0.31)">
+              <path d="M14 25 C14 14 26 8 42 8 C66 8 78 14 84 20 L97 10 C95 22 95 28 97 40 L84 30 C78 36 66 42 42 42 C26 42 14 36 14 25 Z" fill="#f5b8c4"/>
+              <g stroke="#e881a0" stroke-width="5" stroke-linecap="round"><path d="M16 14 L6 7"/><path d="M12 20 L2 17"/><path d="M11 28 L2 32"/></g>
+              <circle cx="24" cy="22" r="3" fill="#2b2230"/>
+            </g>
+          </svg>
+          <span class="choice-title">take a breath</span>
+          <span class="choice-desc">the axolotl breathes with you. in for 4, out for 6.</span>
+          <span class="choice-cta">breathe <span aria-hidden="true">&rarr;</span></span>
+        </button>
+
+        <button class="choice choice-case" type="button" data-go="case">
+          <svg class="choice-art" width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="6" y="12" width="30" height="26" rx="3" fill="#ecd9b0" transform="rotate(-6 21 25)"/>
+            <g stroke="rgba(59,44,53,0.55)" stroke-width="1.6" stroke-linecap="round">
+              <path d="M14 30 l-2.6 -4 M14 30 l0 -5 M14 30 l2.6 -4"/><path d="M24 24 l-2.6 -4 M24 24 l0 -5 M24 24 l2.6 -4"/>
+            </g>
+            <circle cx="32" cy="20" r="8" fill="rgba(255,246,234,0.12)" stroke="#f7eddc" stroke-width="2"/>
+            <path d="M38 26 L44 32" stroke="#f7eddc" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <span class="choice-title">solve something silly</span>
+          <span class="choice-desc" id="choiceCaseDesc">case #003. three clues, two suspects, one missing cookie.</span>
+          <span class="choice-cta">open the file <span aria-hidden="true">&rarr;</span></span>
+        </button>
+
+        <button class="choice choice-rest" type="button" data-go="rest">
+          <svg class="choice-art" width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M30 8 A16 16 0 1 0 40 34 A13 13 0 0 1 30 8 Z" fill="#b3c3f2"/>
+            <circle cx="12" cy="12" r="1.4" fill="#f7eddc"/><circle cx="40" cy="14" r="1.1" fill="#f7eddc"/><circle cx="36" cy="42" r="1.2" fill="#f7eddc"/>
+          </svg>
+          <span class="choice-title">just rest</span>
+          <span class="choice-desc">hands off. notes drift in on their own.</span>
+          <span class="choice-cta">rest <span aria-hidden="true">&rarr;</span></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= the candle ================= -->
+    <section class="sec notes-sec" id="notes" aria-labelledby="notesTitle">
+      <div class="sec-head reveal">
+        <p class="eyebrow">the candle</p>
+        <h2 id="notesTitle">the piece you <em>painted</em></h2>
+        <p class="lede" id="hint">tap the candle holder you painted. again for another note.</p>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="paddock paddock-left">
+          <div class="cage">
+            <div class="cage-back" id="cageBack2" aria-hidden="true">
+            <svg viewBox="0 0 180 124" width="180" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="10" width="8" height="102" rx="3" fill="#4a4f63"/>
+              <rect x="166" y="10" width="8" height="102" rx="3" fill="#4a4f63"/>
+              <rect x="4" y="8" width="172" height="8" rx="3" fill="#565d72"/>
+              <ellipse cx="90" cy="114" rx="80" ry="8" fill="rgba(0,0,0,0.28)"/>
+              <g transform="rotate(-3 90 40)">
+                <line x1="70" y1="16" x2="74" y2="26" stroke="#565d72" stroke-width="2"/>
+                <line x1="110" y1="16" x2="106" y2="26" stroke="#565d72" stroke-width="2"/>
+                <rect x="38" y="26" width="104" height="36" rx="4" fill="#e8c15a" stroke="#3a3325" stroke-width="2.5"/>
+                <text x="90" y="40" text-anchor="middle" font-family="'Special Elite', monospace" font-size="9.5" fill="#3a3325">CERATOSAURUS</text>
+                <text x="90" y="50" text-anchor="middle" font-family="'Special Elite', monospace" font-size="9.5" fill="#3a3325">PADDOCK</text>
+                <text x="90" y="59" text-anchor="middle" font-family="'Special Elite', monospace" font-size="7" fill="#3a3325">&#9889; 10,000 volts</text>
+              </g>
+            </svg>
+            </div>
+            <div class="cage-front" id="cageFront2" aria-hidden="true">
+            <svg viewBox="0 0 180 124" width="180" xmlns="http://www.w3.org/2000/svg">
+              <g fill="#6f7790">
+                <rect x="16" y="6" width="7" height="110" rx="3.5"/>
+                <rect x="45" y="6" width="7" height="110" rx="3.5"/>
+                <rect x="74" y="6" width="7" height="110" rx="3.5"/>
+                <rect x="103" y="6" width="7" height="110" rx="3.5"/>
+                <rect x="132" y="6" width="7" height="110" rx="3.5"/>
+                <rect x="161" y="6" width="7" height="110" rx="3.5"/>
+              </g>
+              <g fill="#99a1b8">
+                <rect x="17" y="8" width="2" height="106" rx="1"/>
+                <rect x="46" y="8" width="2" height="106" rx="1"/>
+                <rect x="75" y="8" width="2" height="106" rx="1"/>
+                <rect x="104" y="8" width="2" height="106" rx="1"/>
+                <rect x="133" y="8" width="2" height="106" rx="1"/>
+                <rect x="162" y="8" width="2" height="106" rx="1"/>
+              </g>
+              <rect x="0" y="0" width="180" height="13" rx="3" fill="#e8c15a"/>
+              <g fill="#3a3325">
+                <path d="M8 0 h16 l-8 13 h-16 Z"/>
+                <path d="M44 0 h16 l-8 13 h-16 Z"/>
+                <path d="M80 0 h16 l-8 13 h-16 Z"/>
+                <path d="M116 0 h16 l-8 13 h-16 Z"/>
+                <path d="M152 0 h16 l-8 13 h-16 Z"/>
+              </g>
+              <rect x="0" y="108" width="180" height="11" rx="3" fill="#565d72"/>
+              <rect x="0" y="109" width="180" height="2.5" rx="1" fill="#7d8499"/>
+              <circle cx="10" cy="113.5" r="2" fill="#99a1b8"/>
+              <circle cx="170" cy="113.5" r="2" fill="#99a1b8"/>
+              <text class="zapbolt" x="90" y="70" text-anchor="middle" font-size="26" opacity="0">&#9889;</text>
+            </svg>
+            </div>
+          </div>
+          <button class="release-btn" id="releaseBtn2" type="button">&#9888; release the ceratosaurus</button>
+        </div>
+
+        <div class="scene" id="scene">
+          <div class="glow"></div>
+          <div class="flame"></div>
+          <div class="wick"></div>
+          <div class="candle"></div>
+          <div class="holder-rim"></div>
+          <div class="holder"></div>
+          <button class="candle-btn" id="candleBtn" type="button" aria-label="Light the candle and read a note"></button>
+          <button class="flame-tap" id="flameTap" type="button" aria-label="The flame"></button>
+
+          <!-- the other piece from that table: dark blue, borrowing her kingsnake's bands -->
+          <button class="his-piece" id="hisPiece" type="button" aria-label="The dark blue piece from the same table">
+            <svg viewBox="0 0 80 64" width="76" height="61" aria-hidden="true">
+              <defs>
+                <linearGradient id="hisGlaze" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#2d4077"/>
+                  <stop offset="0.7" stop-color="#1c2a54"/>
+                  <stop offset="1" stop-color="#141e3d"/>
+                </linearGradient>
+                <radialGradient id="hisGlowFill">
+                  <stop offset="0" stop-color="rgba(255,201,122,0.55)"/>
+                  <stop offset="1" stop-color="rgba(255,201,122,0)"/>
+                </radialGradient>
+                <clipPath id="hisBowl">
+                  <path d="M6 22 Q6 18 10 18 H70 Q74 18 74 22 C74 44 60 60 40 60 C20 60 6 44 6 22 Z"/>
+                </clipPath>
+              </defs>
+              <circle class="his-glow" cx="40" cy="6" r="22" fill="url(#hisGlowFill)"/>
+              <path class="his-flame" d="M40 -3 C44.5 2 45.5 7 40 11 C34.5 7 35.5 2 40 -3 Z" fill="#ffc97a"/>
+              <rect x="39.2" y="10" width="1.6" height="4" rx="0.8" fill="#4a3a45"/>
+              <rect x="31" y="13" width="18" height="7" rx="2" fill="#fdf3e3"/>
+              <path d="M6 22 Q6 18 10 18 H70 Q74 18 74 22 C74 44 60 60 40 60 C20 60 6 44 6 22 Z" fill="url(#hisGlaze)"/>
+              <g clip-path="url(#hisBowl)" fill="none" stroke-linecap="butt">
+                <g stroke="#0d1226" stroke-width="7">
+                  <path d="M15 18 Q13 38 19 60"/><path d="M31 18 Q30 40 32 62"/>
+                  <path d="M49 18 Q50 40 48 62"/><path d="M65 18 Q67 38 61 60"/>
+                </g>
+                <g stroke="#fff6ea" stroke-width="3.4">
+                  <path d="M15 18 Q13 38 19 60"/><path d="M31 18 Q30 40 32 62"/>
+                  <path d="M49 18 Q50 40 48 62"/><path d="M65 18 Q67 38 61 60"/>
+                </g>
+              </g>
+              <ellipse cx="40" cy="19" rx="34" ry="3.6" fill="#34498a"/>
+              <ellipse cx="19" cy="30" rx="6" ry="4" transform="rotate(-30 19 30)" fill="rgba(255,255,255,0.18)"/>
+            </svg>
+          </button>
+          <div class="critter tarantula" aria-hidden="true">
+            <div class="thread"></div>
+            <svg width="46" height="42" viewBox="0 0 60 54">
+              <g stroke="#4a3630" stroke-width="3" stroke-linecap="round" fill="none">
+                <path d="M24 26 C14 20 9 13 5 8"/><path d="M23 30 C11 28 7 24 3 21"/>
+                <path d="M23 34 C12 37 8 41 5 46"/><path d="M25 37 C16 44 13 49 10 53"/>
+                <path d="M36 26 C46 20 51 13 55 8"/><path d="M37 30 C49 28 53 24 57 21"/>
+                <path d="M37 34 C48 37 52 41 55 46"/><path d="M35 37 C44 44 47 49 50 53"/>
+              </g>
+              <ellipse cx="30" cy="38" rx="11" ry="10" fill="#5a3d33"/>
+              <ellipse cx="30" cy="24" rx="8" ry="7" fill="#6b4a3a"/>
+              <circle cx="27" cy="22" r="1.4" fill="#2b2230"/><circle cx="33" cy="22" r="1.4" fill="#2b2230"/>
+            </svg>
+          </div>
+
+          <div class="critter dog chihuahua" aria-hidden="true">
+            <svg width="40" height="46" viewBox="0 0 44 50">
+              <path d="M8 16 L13 2 L20 13 Z" fill="#d9a066"/>
+              <path d="M36 16 L31 2 L24 13 Z" fill="#d9a066"/>
+              <circle cx="22" cy="19" r="11" fill="#d9a066"/>
+              <circle cx="18" cy="17" r="1.7" fill="#2b2230"/><circle cx="26" cy="17" r="1.7" fill="#2b2230"/>
+              <ellipse cx="22" cy="23" rx="3" ry="2.2" fill="#fff6ea"/>
+              <circle cx="22" cy="22" r="1.3" fill="#2b2230"/>
+              <ellipse cx="22" cy="40" rx="9" ry="9.5" fill="#d9a066"/>
+              <circle cx="12" cy="36" r="3" fill="#d9a066"/><circle cx="32" cy="36" r="3" fill="#d9a066"/>
+              <path d="M31 44 C37 42 39 38 38 34" stroke="#d9a066" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+
+          <div class="snake corn" aria-hidden="true">
+            <svg width="150" height="26" viewBox="0 0 150 26">
+              <path d="M4 16 Q20 4 38 14 T74 14 T110 14 T140 12" stroke="#e0703a" stroke-width="7" fill="none" stroke-linecap="round"/>
+              <path d="M4 16 Q20 4 38 14 T74 14 T110 14 T140 12" stroke="#a8432a" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="7 9"/>
+              <ellipse cx="142" cy="12" rx="6" ry="4.5" fill="#e0703a"/>
+              <circle cx="144" cy="11" r="1.1" fill="#2b2230"/>
+              <path d="M148 12 l4 -1 m-4 1 l4 1.5" stroke="#c93a3a" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div class="snake king" aria-hidden="true">
+            <svg width="46" height="34" viewBox="0 0 46 34">
+              <path d="M23 26 C10 26 8 16 18 13 C28 10 34 15 32 20 C30 25 22 24 23 19" stroke="#2e2a33" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <path d="M23 26 C10 26 8 16 18 13 C28 10 34 15 32 20 C30 25 22 24 23 19" stroke="#fff6ea" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="4 8"/>
+              <ellipse cx="24" cy="17" rx="5" ry="4" fill="#2e2a33"/>
+              <circle cx="26" cy="16" r="1" fill="#fff6ea"/>
+            </svg>
+          </div>
+
+          <div class="snake ball" aria-hidden="true">
+            <svg width="50" height="36" viewBox="0 0 50 36">
+              <path d="M25 28 C10 28 7 16 19 13 C31 10 39 16 36 22 C33 28 23 26 25 20" stroke="#7a5c40" stroke-width="7" fill="none" stroke-linecap="round"/>
+              <path d="M25 28 C10 28 7 16 19 13 C31 10 39 16 36 22 C33 28 23 26 25 20" stroke="#d9b380" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="6 10"/>
+              <ellipse cx="26" cy="18" rx="5.5" ry="4.2" fill="#7a5c40"/>
+              <circle cx="28" cy="17" r="1" fill="#2b2230"/>
+            </svg>
+          </div>
+
+
+          <div class="critter dog corgi" aria-hidden="true">
+            <svg width="58" height="42" viewBox="0 0 62 46">
+              <path d="M8 14 L12 2 L18 11 Z" fill="#e8944a"/>
+              <path d="M26 14 L22 2 L16 11 Z" fill="#e8944a"/>
+              <circle cx="17" cy="17" r="10" fill="#e8944a"/>
+              <ellipse cx="15" cy="21" rx="5" ry="4" fill="#fff6ea"/>
+              <circle cx="14" cy="19" r="1.3" fill="#2b2230"/>
+              <circle cx="13" cy="16" r="1.6" fill="#2b2230"/><circle cx="21" cy="16" r="1.6" fill="#2b2230"/>
+              <rect x="18" y="20" width="36" height="16" rx="8" fill="#e8944a"/>
+              <ellipse cx="50" cy="26" rx="8" ry="8" fill="#f2a55e"/>
+              <rect x="22" y="33" width="5" height="9" rx="2.5" fill="#e8944a"/>
+              <rect x="31" y="33" width="5" height="9" rx="2.5" fill="#fff6ea"/>
+              <rect x="41" y="33" width="5" height="9" rx="2.5" fill="#e8944a"/>
+              <rect x="49" y="33" width="5" height="9" rx="2.5" fill="#fff6ea"/>
+              <ellipse cx="30" cy="30" rx="8" ry="5" fill="#fff6ea"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="paddock paddock-right">
+          <div class="cage">
+            <div class="cage-back" id="cageBack" aria-hidden="true">
+            <svg viewBox="0 0 180 124" width="180" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="10" width="8" height="102" rx="3" fill="#4a4f63"/>
+              <rect x="166" y="10" width="8" height="102" rx="3" fill="#4a4f63"/>
+              <rect x="4" y="8" width="172" height="8" rx="3" fill="#565d72"/>
+              <ellipse cx="90" cy="114" rx="80" ry="8" fill="rgba(0,0,0,0.28)"/>
+              <g transform="rotate(-3 90 40)">
+                <line x1="70" y1="16" x2="74" y2="26" stroke="#565d72" stroke-width="2"/>
+                <line x1="110" y1="16" x2="106" y2="26" stroke="#565d72" stroke-width="2"/>
+                <rect x="38" y="26" width="104" height="36" rx="4" fill="#e8c15a" stroke="#3a3325" stroke-width="2.5"/>
+                <text x="90" y="40" text-anchor="middle" font-family="'Special Elite', monospace" font-size="9.5" fill="#3a3325">SPINOSAURUS</text>
+                <text x="90" y="50" text-anchor="middle" font-family="'Special Elite', monospace" font-size="9.5" fill="#3a3325">PADDOCK</text>
+                <text x="90" y="59" text-anchor="middle" font-family="'Special Elite', monospace" font-size="7" fill="#3a3325">&#9889; 10,000 volts</text>
+              </g>
+            </svg>
+            </div>
+            <div class="cage-front" id="cageFront" aria-hidden="true">
+            <svg viewBox="0 0 180 124" width="180" xmlns="http://www.w3.org/2000/svg">
+              <g fill="#6f7790">
+                <rect x="16" y="6" width="7" height="110" rx="3.5"/>
+                <rect x="45" y="6" width="7" height="110" rx="3.5"/>
+                <rect x="74" y="6" width="7" height="110" rx="3.5"/>
+                <rect x="103" y="6" width="7" height="110" rx="3.5"/>
+                <rect x="132" y="6" width="7" height="110" rx="3.5"/>
+                <rect x="161" y="6" width="7" height="110" rx="3.5"/>
+              </g>
+              <g fill="#99a1b8">
+                <rect x="17" y="8" width="2" height="106" rx="1"/>
+                <rect x="46" y="8" width="2" height="106" rx="1"/>
+                <rect x="75" y="8" width="2" height="106" rx="1"/>
+                <rect x="104" y="8" width="2" height="106" rx="1"/>
+                <rect x="133" y="8" width="2" height="106" rx="1"/>
+                <rect x="162" y="8" width="2" height="106" rx="1"/>
+              </g>
+              <rect x="0" y="0" width="180" height="13" rx="3" fill="#e8c15a"/>
+              <g fill="#3a3325">
+                <path d="M8 0 h16 l-8 13 h-16 Z"/>
+                <path d="M44 0 h16 l-8 13 h-16 Z"/>
+                <path d="M80 0 h16 l-8 13 h-16 Z"/>
+                <path d="M116 0 h16 l-8 13 h-16 Z"/>
+                <path d="M152 0 h16 l-8 13 h-16 Z"/>
+              </g>
+              <rect x="0" y="108" width="180" height="11" rx="3" fill="#565d72"/>
+              <rect x="0" y="109" width="180" height="2.5" rx="1" fill="#7d8499"/>
+              <circle cx="10" cy="113.5" r="2" fill="#99a1b8"/>
+              <circle cx="170" cy="113.5" r="2" fill="#99a1b8"/>
+              <text class="zapbolt" x="90" y="70" text-anchor="middle" font-size="26" opacity="0">&#9889;</text>
+            </svg>
+            </div>
+          </div>
+          <button class="release-btn" id="releaseBtn" type="button">&#9888; release the spinosaurus</button>
+        </div>
+
+        <!-- clue: something torn, near the candle -->
+        <button class="clue clue-scrap" data-clue="scrap" type="button" aria-label="Examine the torn note">
+          <span class="scrap-paper">RAW&mdash;</span>
+        </button>
+      </div>
+
+      <div class="note-area">
+        <article class="note-card" id="noteCard" hidden>
+          <p class="note" id="note" aria-live="polite"></p>
+          <div class="note-actions">
+            <button class="link-btn" id="anotherNote" type="button">another note</button>
+            <button class="link-btn" id="putAway" type="button">put it away</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= the pond ================= -->
+    <section class="sec breathe-sec" id="breathe" aria-labelledby="breatheTitle">
+      <div class="sec-head reveal">
+        <p class="eyebrow">the pond</p>
+        <h2 id="breatheTitle">breathe with the <em>axolotl</em></h2>
+        <p class="lede">if today was a lot, catch the axolotl. one minute, in for 4, out for 6.</p>
+      </div>
+
+      <div class="pond-wrap reveal">
+        <!-- clue: three toes, down by the water -->
+        <button class="clue clue-tracks" data-clue="tracks" type="button" aria-label="Examine the suspicious footprints">
+          <svg width="92" height="58" viewBox="0 0 92 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="rgba(245,184,196,0.6)" stroke-width="2.4" stroke-linecap="round">
+              <path d="M10 48 l-5 -8 M10 48 l0 -10 M10 48 l5 -8"/>
+              <path d="M38 33 l-5 -8 M38 33 l0 -10 M38 33 l5 -8"/>
+              <path d="M68 18 l-5 -8 M68 18 l0 -10 M68 18 l5 -8"/>
+            </g>
+          </svg>
+        </button>
+        <div class="pond" id="pond">
+          <div class="ripple ripple-a" aria-hidden="true"></div>
+          <div class="ripple ripple-b" aria-hidden="true"></div>
+          <div class="swimmer">
+            <button class="axo" id="axoTap" type="button" aria-label="Catch the axolotl and breathe">
+              <svg width="92" height="46" viewBox="0 0 100 50">
+                      <path d="M14 25 C14 14 26 8 42 8 C66 8 78 14 84 20 L97 10 C95 22 95 28 97 40 L84 30 C78 36 66 42 42 42 C26 42 14 36 14 25 Z" fill="#f5b8c4"/>
+                      <g stroke="#e881a0" stroke-width="4" stroke-linecap="round">
+                        <path d="M16 14 L6 7"/><path d="M12 20 L2 17"/><path d="M11 28 L2 32"/>
+                      </g>
+                      <circle cx="24" cy="22" r="2.4" fill="#2b2230"/>
+                      <path d="M20 30 Q24 34 29 30" stroke="#d4879b" stroke-width="2" fill="none" stroke-linecap="round"/>
+                      <circle cx="17" cy="28" r="2.6" fill="#f8cdd8"/>
+                      <ellipse cx="40" cy="43" rx="4" ry="3" fill="#f5b8c4"/>
+                      <ellipse cx="62" cy="43" rx="4" ry="3" fill="#f5b8c4"/>
+                    </svg>
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="breatheBtn" type="button">start breathing</button>
+      </div>
+    </section>
+
+    <!-- ================= case #003 ================= -->
+    <section class="sec case-sec" id="case" aria-labelledby="caseTitle">
+      <div class="sec-head reveal">
+        <p class="eyebrow">case #003</p>
+        <h2 id="caseTitle">the vanishing <em>dinosaurs</em></h2>
+        <p class="lede">three clues are hidden on this page. find them all and the culprits will have to show themselves.</p>
+      </div>
+
+      <article class="casefile reveal" id="caseFile" data-state="open" aria-labelledby="caseFileTitle">
+        <div class="casefile-tab" aria-hidden="true">case file #003</div>
+        <header class="casefile-head">
+          <div>
+            <p class="cf-label">the case</p>
+            <p class="cf-title" id="caseFileTitle">the vanishing dinosaurs</p>
+          </div>
+          <p class="stamp" id="caseStamp">open</p>
+        </header>
+
+        <dl class="cf-facts">
+          <div><dt>victim</dt><dd>one (1) cookie</dd></div>
+          <div><dt>suspects</dt><dd>two. unaccounted for.</dd></div>
+          <div><dt>on the case</dt><dd>you, and an ankylosaurus</dd></div>
+        </dl>
+
+        <p class="cf-label">evidence &middot; <span id="caseCount">0 of 3</span> found</p>
+        <ol class="evidence">
+          <li class="ev" data-ev="scrap">
+            <div class="ev-art" aria-hidden="true"><span class="ev-q">?</span></div>
+            <p class="ev-name">a torn confession</p>
+            <p class="ev-hint">something torn, near the candle</p>
+          </li>
+          <li class="ev" data-ev="tracks">
+            <div class="ev-art" aria-hidden="true"><span class="ev-q">?</span></div>
+            <p class="ev-name">suspicious footprints</p>
+            <p class="ev-hint">three toes, down by the water</p>
+          </li>
+          <li class="ev" data-ev="chalk">
+            <div class="ev-art" aria-hidden="true"><span class="ev-q">?</span></div>
+            <p class="ev-name">the victim</p>
+            <p class="ev-hint">an outline, where the page ends</p>
+          </li>
+        </ol>
+
+        <p class="cf-status" id="caseStatus" aria-live="polite">STATUS: open. two suspects unaccounted for.</p>
+        <p class="cf-verdict" id="caseVerdictText" hidden></p>
+
+        <div class="keepsakes" id="keepsakes" hidden>
+          <p class="cf-label">filed with the evidence</p>
+          <div class="keepsake-row">
+            <button class="keepsake" id="doorBtn" type="button">
+              <svg width="18" height="24" viewBox="0 0 18 24" aria-hidden="true">
+                <path d="M2 23 V7 a7 7 0 0 1 14 0 V23 Z" fill="rgba(255,201,122,0.25)" stroke="currentColor" stroke-width="1.6"/>
+                <circle cx="12.4" cy="14.5" r="1.2" fill="currentColor"/>
+              </svg>
+              the pottery place
+            </button>
+            <button class="keepsake" id="paintBtn" type="button" hidden>
+              <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+                <path d="M20 2 L9.5 12.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                <path d="M9 12 C6 11 3.5 13 3.6 15.6 C3.7 18 2.6 19.3 1.5 20 C5 20.8 9.8 20 10.4 16 C10.7 14.4 10.2 13 9 12 Z" fill="#e39aab"/>
+              </svg>
+              paint it again
+            </button>
+          </div>
+        </div>
+
+        <button class="link-btn cf-reset" id="caseReset" type="button" hidden>reopen the case</button>
+      </article>
+    </section>
+
+    <!-- ================= rest ================= -->
+    <section class="sec rest-sec" id="rest" aria-labelledby="restTitle">
+      <div class="sec-head reveal">
+        <p class="eyebrow">rest</p>
+        <h2 id="restTitle">or just <em>rest</em></h2>
+        <p class="lede">hands off. it plays itself: a note every so often, the culprits on a slow walk. arrow keys or space if you want a say.</p>
+        <button class="btn btn-primary" id="restBtn" type="button" aria-pressed="false">start resting</button>
+      </div>
+    </section>
+
+    <!-- ================= the end ================= -->
+    <footer class="ending reveal">
+      <svg class="ending-mark" width="30" height="44" viewBox="0 0 44 64" aria-hidden="true">
+        <path d="M22 4 C27 11 28 16 22 21 C16 16 17 11 22 4 Z" fill="#ffc97a"/>
+        <rect x="13" y="24" width="18" height="26" rx="3" fill="#fdf3e3"/>
+        <path d="M5 46 H39 Q39 62 22 62 Q5 62 5 46 Z" fill="#f2b5c1"/>
+      </svg>
+      <p class="ending-line">that's all of it. the candle will be here whenever you need it.</p>
+      <p class="ending-sign">made for zenith, by amine &middot; july 2026</p>
+      <a class="link-btn ending-top" href="#top">back to the top</a>
+
+      <!-- clue: an outline, where the page ends -->
+      <button class="clue clue-chalk" data-clue="chalk" type="button" aria-label="Examine the chalk outline">
+        <svg width="70" height="66" viewBox="0 0 70 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="35" cy="32" r="22" stroke="rgba(255,246,234,0.5)" stroke-width="2" stroke-dasharray="5 5"/>
+          <path d="M49 15 a11 11 0 0 0 8 13" stroke="rgba(255,246,234,0.5)" stroke-width="2" stroke-dasharray="4 4"/>
+          <circle cx="28" cy="27" r="2.2" fill="rgba(255,246,234,0.4)"/>
+          <circle cx="39" cy="39" r="2.2" fill="rgba(255,246,234,0.4)"/>
+          <circle cx="29" cy="40" r="2.2" fill="rgba(255,246,234,0.4)"/>
+        </svg>
+        <span class="chalk-label">the victim</span>
+      </button>
+    </footer>
+  </main>
+
+  <button class="chip chip-case" id="caseTab" type="button" hidden><span class="chip-k">case #003</span><span class="chip-v"></span></button>
+  <button class="chip chip-rest" id="restChip" type="button" hidden>resting &middot; <span>stop</span></button>
 </div>
 
+<!-- the reveal, and the culprits in hiding -->
 <div class="reveal-dim" id="revealDim" aria-hidden="true"></div>
 <div class="reveal-line" id="revealLine" aria-hidden="true"></div>
-
 
 <div class="hideaway hideaway-spino undercover" id="spinoHideaway" inert>
   <div class="dino-pal">
@@ -1327,192 +559,47 @@
   <div class="dino-rawr" aria-hidden="true">RAWR.</div>
 </div>
 
-<div class="scene" id="scene" role="button" tabindex="0" aria-label="Light the candle to read a note">
-  <div class="glow"></div>
-  <div class="flame"></div>
-  <div class="wick"></div>
-  <div class="candle"></div>
-
-  <div class="holder-rim"></div>
-  <div class="holder"></div>
-  <button class="flame-tap" id="flameTap" aria-label="The flame"></button>
-
-  <!-- the other piece from that table: dark blue, borrowing her kingsnake's bands -->
-  <button class="his-piece" id="hisPiece" type="button" aria-label="The dark blue piece from the same table">
-    <svg viewBox="0 0 80 64" width="76" height="61" aria-hidden="true">
-      <defs>
-        <linearGradient id="hisGlaze" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#2d4077"/>
-          <stop offset="0.7" stop-color="#1c2a54"/>
-          <stop offset="1" stop-color="#141e3d"/>
-        </linearGradient>
-        <radialGradient id="hisGlowFill">
-          <stop offset="0" stop-color="rgba(255,201,122,0.55)"/>
-          <stop offset="1" stop-color="rgba(255,201,122,0)"/>
-        </radialGradient>
-        <clipPath id="hisBowl">
-          <path d="M6 22 Q6 18 10 18 H70 Q74 18 74 22 C74 44 60 60 40 60 C20 60 6 44 6 22 Z"/>
-        </clipPath>
-      </defs>
-      <circle class="his-glow" cx="40" cy="6" r="22" fill="url(#hisGlowFill)"/>
-      <path class="his-flame" d="M40 -3 C44.5 2 45.5 7 40 11 C34.5 7 35.5 2 40 -3 Z" fill="#ffc97a"/>
-      <rect x="39.2" y="10" width="1.6" height="4" rx="0.8" fill="#4a3a45"/>
-      <rect x="31" y="13" width="18" height="7" rx="2" fill="#fdf3e3"/>
-      <path d="M6 22 Q6 18 10 18 H70 Q74 18 74 22 C74 44 60 60 40 60 C20 60 6 44 6 22 Z" fill="url(#hisGlaze)"/>
-      <g clip-path="url(#hisBowl)" fill="none" stroke-linecap="butt">
-        <g stroke="#0d1226" stroke-width="7">
-          <path d="M15 18 Q13 38 19 60"/><path d="M31 18 Q30 40 32 62"/>
-          <path d="M49 18 Q50 40 48 62"/><path d="M65 18 Q67 38 61 60"/>
-        </g>
-        <g stroke="#fff6ea" stroke-width="3.4">
-          <path d="M15 18 Q13 38 19 60"/><path d="M31 18 Q30 40 32 62"/>
-          <path d="M49 18 Q50 40 48 62"/><path d="M65 18 Q67 38 61 60"/>
-        </g>
-      </g>
-      <ellipse cx="40" cy="19" rx="34" ry="3.6" fill="#34498a"/>
-      <ellipse cx="19" cy="30" rx="6" ry="4" transform="rotate(-30 19 30)" fill="rgba(255,255,255,0.18)"/>
-    </svg>
-  </button>
-
-  <div class="critter tarantula" aria-hidden="true">
-    <div class="thread"></div>
-    <svg width="46" height="42" viewBox="0 0 60 54">
-      <g stroke="#4a3630" stroke-width="3" stroke-linecap="round" fill="none">
-        <path d="M24 26 C14 20 9 13 5 8"/><path d="M23 30 C11 28 7 24 3 21"/>
-        <path d="M23 34 C12 37 8 41 5 46"/><path d="M25 37 C16 44 13 49 10 53"/>
-        <path d="M36 26 C46 20 51 13 55 8"/><path d="M37 30 C49 28 53 24 57 21"/>
-        <path d="M37 34 C48 37 52 41 55 46"/><path d="M35 37 C44 44 47 49 50 53"/>
-      </g>
-      <ellipse cx="30" cy="38" rx="11" ry="10" fill="#5a3d33"/>
-      <ellipse cx="30" cy="24" rx="8" ry="7" fill="#6b4a3a"/>
-      <circle cx="27" cy="22" r="1.4" fill="#2b2230"/><circle cx="33" cy="22" r="1.4" fill="#2b2230"/>
-    </svg>
-  </div>
-
-  <div class="critter dog chihuahua" aria-hidden="true">
-    <svg width="40" height="46" viewBox="0 0 44 50">
-      <path d="M8 16 L13 2 L20 13 Z" fill="#d9a066"/>
-      <path d="M36 16 L31 2 L24 13 Z" fill="#d9a066"/>
-      <circle cx="22" cy="19" r="11" fill="#d9a066"/>
-      <circle cx="18" cy="17" r="1.7" fill="#2b2230"/><circle cx="26" cy="17" r="1.7" fill="#2b2230"/>
-      <ellipse cx="22" cy="23" rx="3" ry="2.2" fill="#fff6ea"/>
-      <circle cx="22" cy="22" r="1.3" fill="#2b2230"/>
-      <ellipse cx="22" cy="40" rx="9" ry="9.5" fill="#d9a066"/>
-      <circle cx="12" cy="36" r="3" fill="#d9a066"/><circle cx="32" cy="36" r="3" fill="#d9a066"/>
-      <path d="M31 44 C37 42 39 38 38 34" stroke="#d9a066" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-    </svg>
-  </div>
-
-  <div class="snake corn" aria-hidden="true">
-    <svg width="150" height="26" viewBox="0 0 150 26">
-      <path d="M4 16 Q20 4 38 14 T74 14 T110 14 T140 12" stroke="#e0703a" stroke-width="7" fill="none" stroke-linecap="round"/>
-      <path d="M4 16 Q20 4 38 14 T74 14 T110 14 T140 12" stroke="#a8432a" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="7 9"/>
-      <ellipse cx="142" cy="12" rx="6" ry="4.5" fill="#e0703a"/>
-      <circle cx="144" cy="11" r="1.1" fill="#2b2230"/>
-      <path d="M148 12 l4 -1 m-4 1 l4 1.5" stroke="#c93a3a" stroke-width="1" stroke-linecap="round"/>
-    </svg>
-  </div>
-
-  <div class="snake king" aria-hidden="true">
-    <svg width="46" height="34" viewBox="0 0 46 34">
-      <path d="M23 26 C10 26 8 16 18 13 C28 10 34 15 32 20 C30 25 22 24 23 19" stroke="#2e2a33" stroke-width="6" fill="none" stroke-linecap="round"/>
-      <path d="M23 26 C10 26 8 16 18 13 C28 10 34 15 32 20 C30 25 22 24 23 19" stroke="#fff6ea" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="4 8"/>
-      <ellipse cx="24" cy="17" rx="5" ry="4" fill="#2e2a33"/>
-      <circle cx="26" cy="16" r="1" fill="#fff6ea"/>
-    </svg>
-  </div>
-
-  <div class="snake ball" aria-hidden="true">
-    <svg width="50" height="36" viewBox="0 0 50 36">
-      <path d="M25 28 C10 28 7 16 19 13 C31 10 39 16 36 22 C33 28 23 26 25 20" stroke="#7a5c40" stroke-width="7" fill="none" stroke-linecap="round"/>
-      <path d="M25 28 C10 28 7 16 19 13 C31 10 39 16 36 22 C33 28 23 26 25 20" stroke="#d9b380" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="6 10"/>
-      <ellipse cx="26" cy="18" rx="5.5" ry="4.2" fill="#7a5c40"/>
-      <circle cx="28" cy="17" r="1" fill="#2b2230"/>
-    </svg>
-  </div>
-
-
-  <div class="critter dog corgi" aria-hidden="true">
-    <svg width="58" height="42" viewBox="0 0 62 46">
-      <path d="M8 14 L12 2 L18 11 Z" fill="#e8944a"/>
-      <path d="M26 14 L22 2 L16 11 Z" fill="#e8944a"/>
-      <circle cx="17" cy="17" r="10" fill="#e8944a"/>
-      <ellipse cx="15" cy="21" rx="5" ry="4" fill="#fff6ea"/>
-      <circle cx="14" cy="19" r="1.3" fill="#2b2230"/>
-      <circle cx="13" cy="16" r="1.6" fill="#2b2230"/><circle cx="21" cy="16" r="1.6" fill="#2b2230"/>
-      <rect x="18" y="20" width="36" height="16" rx="8" fill="#e8944a"/>
-      <ellipse cx="50" cy="26" rx="8" ry="8" fill="#f2a55e"/>
-      <rect x="22" y="33" width="5" height="9" rx="2.5" fill="#e8944a"/>
-      <rect x="31" y="33" width="5" height="9" rx="2.5" fill="#fff6ea"/>
-      <rect x="41" y="33" width="5" height="9" rx="2.5" fill="#e8944a"/>
-      <rect x="49" y="33" width="5" height="9" rx="2.5" fill="#fff6ea"/>
-      <ellipse cx="30" cy="30" rx="8" ry="5" fill="#fff6ea"/>
-    </svg>
-  </div>
-</div>
-
-<p class="hint" id="hint">tap the candle holder you painted, again for another note</p>
-<p class="hint hint2" id="hint2">and if today was a lot, catch the axolotl, then breathe with the glow.</p>
-
-<div class="note-area">
-  <p class="note" id="note" aria-live="polite"></p>
-</div>
-
-<div class="keepsakes" id="keepsakes" hidden>
-  <button class="keepsake" id="doorBtn" type="button">
-    <svg width="18" height="24" viewBox="0 0 18 24" aria-hidden="true">
-      <path d="M2 23 V7 a7 7 0 0 1 14 0 V23 Z" fill="rgba(255,201,122,0.15)" stroke="#ffc97a" stroke-width="1.6"/>
-      <circle cx="12.4" cy="14.5" r="1.2" fill="#ffc97a"/>
-    </svg>
-    the pottery place
-  </button>
-  <button class="keepsake" id="paintBtn" type="button" hidden>
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
-      <path d="M20 2 L9.5 12.5" stroke="#ffc97a" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M9 12 C6 11 3.5 13 3.6 15.6 C3.7 18 2.6 19.3 1.5 20 C5 20.8 9.8 20 10.4 16 C10.7 14.4 10.2 13 9 12 Z" fill="#f5b8c4"/>
-    </svg>
-    paint it again
-  </button>
-</div>
-
-<div class="pond">
-  <div class="swimmer">
-    <span class="flip" id="axoTap" role="button" tabindex="0" aria-label="Breathe with the axolotl">
-      <svg width="92" height="46" viewBox="0 0 100 50">
+<!-- ================= overlays ================= -->
+<div class="overlay breath" id="breathOverlay" role="dialog" aria-modal="true" aria-labelledby="breathTitle" inert>
+  <p class="eyebrow" id="breathTitle">breathe with the axolotl</p>
+  <div class="breath-stage" id="breathStage" data-phase="ready">
+    <div class="breath-halo" aria-hidden="true"></div>
+    <div class="breath-orb" aria-hidden="true">
+      <svg class="breath-axo" width="120" height="60" viewBox="0 0 100 50">
         <path d="M14 25 C14 14 26 8 42 8 C66 8 78 14 84 20 L97 10 C95 22 95 28 97 40 L84 30 C78 36 66 42 42 42 C26 42 14 36 14 25 Z" fill="#f5b8c4"/>
-        <g stroke="#e881a0" stroke-width="4" stroke-linecap="round">
+        <g class="breath-gills" stroke="#e881a0" stroke-width="4" stroke-linecap="round">
           <path d="M16 14 L6 7"/><path d="M12 20 L2 17"/><path d="M11 28 L2 32"/>
         </g>
         <circle cx="24" cy="22" r="2.4" fill="#2b2230"/>
         <path d="M20 30 Q24 34 29 30" stroke="#d4879b" stroke-width="2" fill="none" stroke-linecap="round"/>
         <circle cx="17" cy="28" r="2.6" fill="#f8cdd8"/>
-        <ellipse cx="40" cy="43" rx="4" ry="3" fill="#f5b8c4"/>
-        <ellipse cx="62" cy="43" rx="4" ry="3" fill="#f5b8c4"/>
       </svg>
-    </span>
+    </div>
   </div>
-
-</div>
-
-<button class="rest-btn" id="restBtn" type="button" aria-pressed="false">&#128164; rest mode</button>
-<div class="rest-note" id="restNote">hands off. it plays itself. arrow keys or space if you want a say.</div>
-
+  <p class="breath-text" id="breathText" aria-live="polite">breathe in</p>
+  <p class="breath-tick" id="breathTick" aria-hidden="true">4</p>
+  <div class="breath-progress" id="breathProgress" aria-label="breath 1 of 6"></div>
+  <div class="breath-controls">
+    <button class="btn btn-quiet" id="breathPause" type="button">pause</button>
+    <button class="btn btn-quiet" id="breathAgain" type="button" hidden>another minute</button>
+  </div>
+  <button class="link-btn overlay-exit" id="breathExit" type="button">back to the candle</button>
 </div>
 
 <div class="overlay chapter" id="chapter" role="dialog" aria-modal="true" aria-labelledby="chapterTitle" inert>
-  <p class="overlay-kicker" id="chapterTitle">the pottery place &middot; july 2026</p>
+  <p class="eyebrow" id="chapterTitle">the pottery place &middot; july 2026</p>
   <div class="chapter-art" id="chapterArt" aria-hidden="true"></div>
   <p class="chapter-line" id="chapterLine" aria-live="polite"></p>
   <div class="chapter-nav">
-    <button class="pill" id="chapterPrev" type="button">back</button>
+    <button class="btn btn-quiet" id="chapterPrev" type="button">back</button>
     <div class="chapter-dots" id="chapterDots" aria-hidden="true"></div>
-    <button class="pill" id="chapterNext" type="button">next</button>
+    <button class="btn btn-primary" id="chapterNext" type="button">next</button>
   </div>
-  <button class="overlay-exit" id="chapterExit" type="button">back to the candle</button>
+  <button class="link-btn overlay-exit" id="chapterExit" type="button">back to the candle</button>
 </div>
 
 <div class="overlay studio" id="studio" role="dialog" aria-modal="true" aria-labelledby="studioTitle" inert>
-  <p class="overlay-kicker" id="studioTitle">the studio</p>
+  <p class="eyebrow" id="studioTitle">the studio</p>
   <p class="studio-sub">your turn again</p>
   <div class="studio-piece" id="studioPiece" aria-hidden="true">
     <div class="candle"></div>
@@ -1528,122 +615,11 @@
   <div class="studio-swatches" id="studioSwatches"></div>
   <p class="swatch-name" id="swatchName" aria-live="polite"></p>
   <div class="studio-actions">
-    <button class="pill" id="studioKeep" type="button">keep it</button>
-    <button class="pill" id="studioOriginal" type="button">the july original</button>
+    <button class="btn btn-primary" id="studioKeep" type="button">keep it</button>
+    <button class="btn btn-quiet" id="studioOriginal" type="button">the july original</button>
   </div>
-  <button class="overlay-exit" id="studioExit" type="button">back to the candle</button>
+  <button class="link-btn overlay-exit" id="studioExit" type="button">back to the candle</button>
 </div>
-
-<div class="overlay breath-overlay" id="breathOverlay" role="dialog" aria-modal="true" aria-label="Breathe with the glow" inert>
-  <div class="breath-glow"></div>
-  <p class="breath-text" id="breathText">breathe in</p>
-  <p class="breath-sub">no words needed. just this.</p>
-  <button class="breath-exit" id="breathExit">back to the candle</button>
-</div>
-
-
-<div class="cage-back" id="cageBack" aria-hidden="true">
-<svg viewBox="0 0 180 124" width="180" xmlns="http://www.w3.org/2000/svg">
-  <rect x="6" y="10" width="8" height="102" rx="3" fill="#4a4f63"/>
-  <rect x="166" y="10" width="8" height="102" rx="3" fill="#4a4f63"/>
-  <rect x="4" y="8" width="172" height="8" rx="3" fill="#565d72"/>
-  <ellipse cx="90" cy="114" rx="80" ry="8" fill="rgba(0,0,0,0.28)"/>
-  <g transform="rotate(-3 90 40)">
-    <line x1="70" y1="16" x2="74" y2="26" stroke="#565d72" stroke-width="2"/>
-    <line x1="110" y1="16" x2="106" y2="26" stroke="#565d72" stroke-width="2"/>
-    <rect x="38" y="26" width="104" height="36" rx="4" fill="#e8c15a" stroke="#3a3325" stroke-width="2.5"/>
-    <text x="90" y="40" text-anchor="middle" font-family="'Special Elite', monospace" font-size="9.5" fill="#3a3325">SPINOSAURUS</text>
-    <text x="90" y="50" text-anchor="middle" font-family="'Special Elite', monospace" font-size="9.5" fill="#3a3325">PADDOCK</text>
-    <text x="90" y="59" text-anchor="middle" font-family="'Special Elite', monospace" font-size="7" fill="#3a3325">&#9889; 10,000 volts</text>
-  </g>
-</svg>
-</div>
-<div class="cage-front" id="cageFront" aria-hidden="true">
-<svg viewBox="0 0 180 124" width="180" xmlns="http://www.w3.org/2000/svg">
-  <g fill="#6f7790">
-    <rect x="16" y="6" width="7" height="110" rx="3.5"/>
-    <rect x="45" y="6" width="7" height="110" rx="3.5"/>
-    <rect x="74" y="6" width="7" height="110" rx="3.5"/>
-    <rect x="103" y="6" width="7" height="110" rx="3.5"/>
-    <rect x="132" y="6" width="7" height="110" rx="3.5"/>
-    <rect x="161" y="6" width="7" height="110" rx="3.5"/>
-  </g>
-  <g fill="#99a1b8">
-    <rect x="17" y="8" width="2" height="106" rx="1"/>
-    <rect x="46" y="8" width="2" height="106" rx="1"/>
-    <rect x="75" y="8" width="2" height="106" rx="1"/>
-    <rect x="104" y="8" width="2" height="106" rx="1"/>
-    <rect x="133" y="8" width="2" height="106" rx="1"/>
-    <rect x="162" y="8" width="2" height="106" rx="1"/>
-  </g>
-  <rect x="0" y="0" width="180" height="13" rx="3" fill="#e8c15a"/>
-  <g fill="#3a3325">
-    <path d="M8 0 h16 l-8 13 h-16 Z"/>
-    <path d="M44 0 h16 l-8 13 h-16 Z"/>
-    <path d="M80 0 h16 l-8 13 h-16 Z"/>
-    <path d="M116 0 h16 l-8 13 h-16 Z"/>
-    <path d="M152 0 h16 l-8 13 h-16 Z"/>
-  </g>
-  <rect x="0" y="108" width="180" height="11" rx="3" fill="#565d72"/>
-  <rect x="0" y="109" width="180" height="2.5" rx="1" fill="#7d8499"/>
-  <circle cx="10" cy="113.5" r="2" fill="#99a1b8"/>
-  <circle cx="170" cy="113.5" r="2" fill="#99a1b8"/>
-  <text class="zapbolt" x="90" y="70" text-anchor="middle" font-size="26" opacity="0">&#9889;</text>
-</svg>
-</div>
-<div class="cage-back" id="cageBack2" aria-hidden="true">
-<svg viewBox="0 0 180 124" width="180" xmlns="http://www.w3.org/2000/svg">
-  <rect x="6" y="10" width="8" height="102" rx="3" fill="#4a4f63"/>
-  <rect x="166" y="10" width="8" height="102" rx="3" fill="#4a4f63"/>
-  <rect x="4" y="8" width="172" height="8" rx="3" fill="#565d72"/>
-  <ellipse cx="90" cy="114" rx="80" ry="8" fill="rgba(0,0,0,0.28)"/>
-  <g transform="rotate(-3 90 40)">
-    <line x1="70" y1="16" x2="74" y2="26" stroke="#565d72" stroke-width="2"/>
-    <line x1="110" y1="16" x2="106" y2="26" stroke="#565d72" stroke-width="2"/>
-    <rect x="38" y="26" width="104" height="36" rx="4" fill="#e8c15a" stroke="#3a3325" stroke-width="2.5"/>
-    <text x="90" y="40" text-anchor="middle" font-family="'Special Elite', monospace" font-size="9.5" fill="#3a3325">CERATOSAURUS</text>
-    <text x="90" y="50" text-anchor="middle" font-family="'Special Elite', monospace" font-size="9.5" fill="#3a3325">PADDOCK</text>
-    <text x="90" y="59" text-anchor="middle" font-family="'Special Elite', monospace" font-size="7" fill="#3a3325">&#9889; 10,000 volts</text>
-  </g>
-</svg>
-</div>
-<div class="cage-front" id="cageFront2" aria-hidden="true">
-<svg viewBox="0 0 180 124" width="180" xmlns="http://www.w3.org/2000/svg">
-  <g fill="#6f7790">
-    <rect x="16" y="6" width="7" height="110" rx="3.5"/>
-    <rect x="45" y="6" width="7" height="110" rx="3.5"/>
-    <rect x="74" y="6" width="7" height="110" rx="3.5"/>
-    <rect x="103" y="6" width="7" height="110" rx="3.5"/>
-    <rect x="132" y="6" width="7" height="110" rx="3.5"/>
-    <rect x="161" y="6" width="7" height="110" rx="3.5"/>
-  </g>
-  <g fill="#99a1b8">
-    <rect x="17" y="8" width="2" height="106" rx="1"/>
-    <rect x="46" y="8" width="2" height="106" rx="1"/>
-    <rect x="75" y="8" width="2" height="106" rx="1"/>
-    <rect x="104" y="8" width="2" height="106" rx="1"/>
-    <rect x="133" y="8" width="2" height="106" rx="1"/>
-    <rect x="162" y="8" width="2" height="106" rx="1"/>
-  </g>
-  <rect x="0" y="0" width="180" height="13" rx="3" fill="#e8c15a"/>
-  <g fill="#3a3325">
-    <path d="M8 0 h16 l-8 13 h-16 Z"/>
-    <path d="M44 0 h16 l-8 13 h-16 Z"/>
-    <path d="M80 0 h16 l-8 13 h-16 Z"/>
-    <path d="M116 0 h16 l-8 13 h-16 Z"/>
-    <path d="M152 0 h16 l-8 13 h-16 Z"/>
-  </g>
-  <rect x="0" y="108" width="180" height="11" rx="3" fill="#565d72"/>
-  <rect x="0" y="109" width="180" height="2.5" rx="1" fill="#7d8499"/>
-  <circle cx="10" cy="113.5" r="2" fill="#99a1b8"/>
-  <circle cx="170" cy="113.5" r="2" fill="#99a1b8"/>
-  <text class="zapbolt" x="90" y="70" text-anchor="middle" font-size="26" opacity="0">&#9889;</text>
-</svg>
-</div>
-
-
-<button class="release-btn" id="releaseBtn" type="button">&#9888; release the spinosaurus</button>
-<button class="release-btn" id="releaseBtn2" type="button">&#9888; release the ceratosaurus</button>
 
 <div id="ankyCursor" aria-hidden="true"><span class="anky-flip"><svg class="anky-svg" viewBox="0 0 132 80" xmlns="http://www.w3.org/2000/svg">
   <!-- far legs -->
@@ -1692,1300 +668,6 @@
   <circle cx="39.5" cy="27" r="2.2" fill="#4a3a45"/>
   <path d="M27.5 32.5 q 4.5 4 9 0" stroke="#4a3a45" stroke-width="2" fill="none" stroke-linecap="round"/>
 </svg></span></div>
-
-<script>
-  // ---- the words ----
-  const notes = [
-    "Whatever it is, it's not too much. It never was.",
-    "Reminder: you're the person who spent forever getting one tiny section of a candle holder perfect. And it was perfect. That's just how you do things slow, careful, and worth it. This will be too.",
-    "Breathe. In for 4, out for 6. The candle will do it with you. I'll wait.",
-    "You don't have to have it figured out today. Today just needs surviving. Tomorrow can be impressed by you.",
-    "Text me. Yes, even about this. Especially about this.",
-    "Stress check: have you eaten? Drink water. This is a threat \ud83e\udd70",
-    "You're a designer, treat the problem like a bad first draft. It's allowed to be ugly right now.",
-    "Somewhere out there, I'm rooting for you. Probably right now, actually.",
-    "Nothing about you has ever felt like a burden to me. Not once.",
-    "Close the laptop. Look out a window. There's a whole world out there that has no deadlines in it.",
-    "Just so you know you're a cinnamon girl who solves every murder mystery you'll solve this one too \u2764\ufe0f",
-    "if the dinosaurs are chasing you right now, that's not stress. that's cardio.",
-    "the bonk is legally protected self-defence. the ankylosaurus and I checked.",
-    "do not press the yellow buttons. (press the yellow buttons.)",
-    "You're allowed to be tired without earning it.",
-    "Whatever went wrong today, it doesn't get to follow you in here. This page has a strict door policy.",
-    "You've survived 100% of your worst days so far. Statistically incredible. Keep the streak.",
-    "You have a way of making small things careful and careful things beautiful. I noticed it the first hour I knew you.",
-    "For the record: your laugh has been stuck in my head since the pottery place. I've stopped fighting it.",
-    "Rate today out of 10. Wrong answers accepted. I want to hear them all."
-  ];
-
-  // only shuffled into the deck late at night (22:00 to 04:59)
-  const nightNotes = [
-    "If this note found you at 2am: go to sleep, cutie. The candle will still be here tomorrow. So will I."
-  ];
-
-  const caseNote = "CASE FILE #002: the mystery of the racing heart\nSUSPECT: Zenith. Cutiepie. Cheeky. Cinnamon girl.\nEVIDENCE: one perfectly painted candle holder. Several very cute decisions about colours. A laugh the detective keeps thinking about.\nVERDICT: guilty of being the best part of my week.\nSENTENCE: a second date. No appeals.\n\u2014 detective amine";
-
-  const caseNote2 = "CASE FILE #004: the mystery of why the detective keeps thinking about her\nSUSPECT: Zenith. still her. always her.\nEVIDENCE: one laugh, replaying at random hours. several very careful hands. a page that keeps growing because he keeps thinking of things she'd like.\nVERDICT: unsolvable. the detective has stopped investigating and started enjoying it.\nSENTENCE: more time together. effective immediately.\n\u2014 detective amine";
-
-  const caseVerdict = "CASE FILE #003: the vanishing dinosaurs\nVICTIM: one (1) cookie. devoured at the scene.\nEVIDENCE: three-toed footprints. a torn confession reading 'RAW\u2014'. a chalk outline where the cookie used to be.\nVERDICT: it was the ceratosaurus and the spinosaurus. in the margins. with the RAWR.\nSENTENCE: to chase the detective around this page forever.\n\u2014 detective amine";
-
-  const hisNotes = [
-    "mine was the dark blue one, from the same table. on here i let it borrow your kingsnake's stripes.",
-    "two candles now. yours lights the whole page. mine just likes sitting next to it."
-  ];
-
-  const secretNotes = [
-    "You looked very cute on our first date, especially when you were deciding which colours to use, and when you were painting.",
-    "Second secret: I built every hidden thing on this page because I like the way you look when you find things."
-  ];
-
-  const evLabels = {
-    tracks: '✓ suspicious footprints (three toes. hm.)',
-    scrap: "✓ a torn confession ('RAW—')",
-    chalk: '✓ the victim (one cookie, devoured)'
-  };
-
-  // ---- elements ----
-  const $ = (id) => document.getElementById(id);
-  const intro = $('intro');
-  const main = $('main');
-  const scene = $('scene');
-  const flameTap = $('flameTap');
-  const hisPiece = $('hisPiece');
-  const hint = $('hint');
-  const hint2 = $('hint2');
-  const note = $('note');
-  const axoTap = $('axoTap');
-  const sub = $('sub');
-  const breathOverlay = $('breathOverlay');
-  const breathText = $('breathText');
-  const breathExit = $('breathExit');
-  const clueEls = Array.from(document.querySelectorAll('.clue'));
-  const caseTab = $('caseTab');
-  const casePanel = $('casePanel');
-  const caseStatus = $('caseStatus');
-  const caseReset = $('caseReset');
-  const revealDim = $('revealDim');
-  const revealLine = $('revealLine');
-  const ankyCursor = $('ankyCursor');
-  const cageBack = $('cageBack');
-  const cageFront = $('cageFront');
-  const cageBack2 = $('cageBack2');
-  const cageFront2 = $('cageFront2');
-  const releaseBtn = $('releaseBtn');
-  const releaseBtn2 = $('releaseBtn2');
-  const restBtn = $('restBtn');
-  const restNote = $('restNote');
-  const keepsakes = $('keepsakes');
-  const doorBtn = $('doorBtn');
-  const paintBtn = $('paintBtn');
-  const chapter = $('chapter');
-  const chapterArt = $('chapterArt');
-  const chapterLine = $('chapterLine');
-  const chapterDots = $('chapterDots');
-  const chapterPrev = $('chapterPrev');
-  const chapterNext = $('chapterNext');
-  const chapterExit = $('chapterExit');
-  const studio = $('studio');
-  const studioPiece = $('studioPiece');
-  const studioParts = $('studioParts');
-  const studioSwatches = $('studioSwatches');
-  const swatchName = $('swatchName');
-  const studioKeep = $('studioKeep');
-  const studioOriginal = $('studioOriginal');
-  const studioExit = $('studioExit');
-
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const finePointer = window.matchMedia('(pointer: fine)').matches;
-  const CASE_KEY = 'zenith-case-003';
-  const GLAZE_KEY = 'zenith-glaze';
-  const DATE_SEEN_KEY = 'zenith-date-seen';
-  const SOLVED_STATUS = 'STATUS: solved. culprits at large. do not run. (they love it when you run.)';
-
-  // ---- state ----
-  let lit = false;
-  let deck = [];
-  let lastNote = null;
-  let secretIdx = 0;
-  let hisIdx = 0;
-  let caseIdx = 0;
-  let cluesFound = 0;
-  let caseSolved = false;
-  let containmentStarted = false;
-  let releaseCount = 0;
-  let breathTimer = null;
-  let heartTimer = null;
-
-  // ---- helpers ----
-  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-  const onMain = () => !main.classList.contains('hidden');
-  const breathOpen = () => breathOverlay.classList.contains('on');
-  const overlayOpen = () => !!document.querySelector('.overlay.on');
-
-  // restart a CSS animation even if the class is already there
-  function replay(el, cls) {
-    el.classList.remove(cls);
-    void el.offsetWidth;
-    el.classList.add(cls);
-  }
-
-  function isNight() {
-    const hr = new Date().getHours();
-    return hr >= 22 || hr < 5;
-  }
-
-  // time-aware subtitle
-  const hour = new Date().getHours();
-  if (hour < 12) sub.textContent = 'in case the morning feels heavy';
-  else if (hour < 18) sub.textContent = 'in case the day feels heavy';
-  else sub.textContent = 'in case tonight feels heavy';
-
-  function shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  function nextNote() {
-    if (deck.length === 0) {
-      deck = shuffle(isNight() ? notes.concat(nightNotes) : notes);
-      // never show the same note twice in a row across a reshuffle
-      if (deck.length > 1 && deck[deck.length - 1] === lastNote) {
-        [deck[deck.length - 1], deck[0]] = [deck[0], deck[deck.length - 1]];
-      }
-    }
-    lastNote = deck.pop();
-    return lastNote;
-  }
-
-  function displayNote(text, kind) {
-    note.classList.remove('show');
-    setTimeout(() => {
-      note.textContent = text;
-      note.classList.toggle('secret', kind === 'pink');
-      note.classList.toggle('case', kind === 'case');
-      note.classList.toggle('his', kind === 'his');
-      note.classList.add('show');
-    }, lit ? 350 : 900);
-  }
-
-  function lightCandle() {
-    if (lit) return;
-    lit = true;
-    scene.classList.add('lit');
-    hint.style.opacity = '0';
-    hint2.style.opacity = '0';
-  }
-
-  // ---- the culprits in hiding (dir: -1 faces left, 1 faces right) ----
-  function makeHideaway(id, dir) {
-    const wrap = $(id);
-    const pal = wrap.querySelector('.dino-pal');
-    const rawr = wrap.querySelector('.dino-rawr');
-    const feet = wrap.querySelector('.feet-tap');
-    const dino = { img: wrap.querySelector('.dino-image'), scared: false };
-
-    function setOffsets(sx, sy, peekY, rot) {
-      wrap.style.setProperty('--stalk-x', sx + 'px');
-      wrap.style.setProperty('--stalk-y', sy + 'px');
-      pal.style.setProperty('--peek-y', peekY + 'px');
-      pal.style.setProperty('--peek-rot', rot + 'deg');
-    }
-
-    dino.stalk = (x, y) => {
-      if (!onMain() || wrap.classList.contains('undercover') || pal.classList.contains('scare')) return;
-      const nx = (x / Math.max(window.innerWidth, 1)) * 2 - 1;
-      const ny = (y / Math.max(window.innerHeight, 1)) * 2 - 1;
-      setOffsets(
-        clamp(dir * nx * 16, -18, 18),
-        clamp(ny * 8, -10, 10),
-        clamp(-ny * 8, -12, 6),
-        clamp(dir * nx * 7, -10, 10)
-      );
-      wrap.classList.add('stalking');
-    };
-
-    dino.reset = () => {
-      if (pal.classList.contains('scare')) return;
-      setOffsets(0, 0, 0, 0);
-      wrap.classList.remove('stalking');
-    };
-
-    dino.scare = () => {
-      if (dino.scared) return;
-      dino.scared = true;
-      rawr.classList.remove('show');
-      wrap.classList.remove('stalking');
-      setOffsets(0, 0, 0, 0);
-      replay(pal, 'scare');
-      rawr.classList.add('show');
-      setTimeout(() => {
-        pal.classList.remove('scare');
-        dino.scared = false;
-        dino.reset();
-      }, 1150);
-      setTimeout(() => rawr.classList.remove('show'), 900);
-    };
-
-    // hidden culprits can't be tabbed to
-    dino.setUndercover = (on) => {
-      wrap.classList.toggle('undercover', on);
-      wrap.toggleAttribute('inert', on);
-    };
-
-    feet.addEventListener('pointerdown', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dino.scare();
-    });
-    feet.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        e.stopPropagation();
-        dino.scare();
-      }
-    });
-
-    return dino;
-  }
-
-  const spino = makeHideaway('spinoHideaway', -1);
-  const cerato = makeHideaway('ceratoHideaway', 1);
-  const dinos = [spino, cerato];
-
-  // ---- intro ----
-  $('startBtn').addEventListener('click', (e) => {
-    intro.style.display = 'none';
-    main.classList.remove('hidden');
-    // keyboard users land on the candle instead of a vanished button
-    if (e.detail === 0) scene.focus({ preventScroll: true });
-    // case already solved on an earlier visit: the culprits are waiting
-    if (caseSolved) setTimeout(startChase, 900);
-  });
-
-  // ---- the candle ----
-  scene.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); scene.click(); }
-  });
-
-  scene.addEventListener('click', () => {
-    lightCandle();
-    displayNote(nextNote(), false);
-    heartOn(3000);
-    if (chase.active && !containmentStarted) beginContainment();
-    else chase.runners.forEach(recontainRunner);
-  });
-
-  $('nameTap').addEventListener('click', () => {
-    lightCandle();
-    displayNote(caseIdx === 0 ? caseNote : caseNote2, 'case');
-    caseIdx = 1 - caseIdx;
-  });
-
-  flameTap.addEventListener('click', (e) => {
-    e.stopPropagation();
-    displayNote(secretNotes[secretIdx], 'pink');
-    secretIdx = (secretIdx + 1) % secretNotes.length;
-    heartOn(3000);
-  });
-
-  hisPiece.addEventListener('click', (e) => {
-    e.stopPropagation();
-    lightCandle();
-    hisPiece.classList.add('lit');
-    displayNote(hisNotes[hisIdx], 'his');
-    hisIdx = (hisIdx + 1) % hisNotes.length;
-    heartOn(3000);
-  });
-
-  // ---- breathing with the axolotl ----
-  function startBreathCycle() {
-    clearTimeout(breathTimer);
-    breathText.textContent = 'breathe in';
-    let breathingIn = true;
-    function cycle() {
-      breathingIn = !breathingIn;
-      breathText.textContent = breathingIn ? 'breathe in' : 'and out, slowly';
-      breathTimer = setTimeout(cycle, breathingIn ? 4000 : 6000);
-    }
-    breathTimer = setTimeout(cycle, 4000);
-  }
-
-  function openBreath() {
-    lightCandle();
-    openOverlay(breathOverlay, breathExit);
-    startBreathCycle();
-  }
-
-  function closeBreath() {
-    if (!breathOpen()) return;
-    closeOverlay(breathOverlay);
-    clearTimeout(breathTimer);
-    displayNote(notes[2], false);
-    scene.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' });
-    axoTap.focus({ preventScroll: true });
-  }
-
-  axoTap.addEventListener('click', openBreath);
-  axoTap.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBreath(); }
-  });
-  breathExit.addEventListener('click', closeBreath);
-
-  // ---- full-screen overlays share one open/close ----
-  function openOverlay(el, focusEl) {
-    el.classList.add('on');
-    el.removeAttribute('inert');
-    main.setAttribute('inert', '');
-    focusEl.focus({ preventScroll: true });
-  }
-
-  function closeOverlay(el, returnFocusEl) {
-    el.classList.remove('on');
-    el.setAttribute('inert', '');
-    main.removeAttribute('inert');
-    if (returnFocusEl) returnFocusEl.focus({ preventScroll: true });
-  }
-
-  // ---- keepsakes: the pottery place opens once the case is closed ----
-  function unlockKeepsakes() {
-    keepsakes.hidden = false;
-    paintBtn.hidden = !(stored(DATE_SEEN_KEY) || stored(GLAZE_KEY));
-    requestAnimationFrame(() => keepsakes.classList.add('on'));
-  }
-
-  function stored(key) {
-    try { return localStorage.getItem(key); } catch (e) { return null; }
-  }
-
-  function store(key, value) {
-    try {
-      if (value === null) localStorage.removeItem(key);
-      else localStorage.setItem(key, value);
-    } catch (e) { /* private mode: just not remembered */ }
-  }
-
-  // ---- little pottery drawings for the chapter ----
-  let potId = 0;
-
-  function potSVG(o) {
-    const id = 'pot' + (++potId);
-    const x = o.x || 0;
-    const body = 'M' + (x + 18) + ' 60 Q' + (x + 18) + ' 56 ' + (x + 22) + ' 56 H' + (x + 98) + ' Q' + (x + 102) + ' 56 ' + (x + 102) + ' 60 C' + (x + 102) + ' 88 ' + (x + 84) + ' 108 ' + (x + 60) + ' 108 C' + (x + 36) + ' 108 ' + (x + 18) + ' 88 ' + (x + 18) + ' 60 Z';
-    let out = '<defs><clipPath id="' + id + 'c"><path d="' + body + '"/></clipPath>' +
-      '<pattern id="' + id + 'p" width="11" height="7" patternUnits="userSpaceOnUse">' +
-      '<circle cx="5.5" cy="0" r="2.6" fill="' + (o.spots || 'none') + '"/>' +
-      '<circle cx="0" cy="3.5" r="2.6" fill="' + (o.spots || 'none') + '"/>' +
-      '<circle cx="11" cy="3.5" r="2.6" fill="' + (o.spots || 'none') + '"/></pattern></defs>';
-    if (o.candle) {
-      if (o.lit) {
-        out += '<circle cx="' + (x + 60) + '" cy="10" r="34" fill="url(#chapterGlow)"/>' +
-          '<path d="M' + (x + 60) + ' -4 C' + (x + 66) + ' 4 ' + (x + 67) + ' 10 ' + (x + 60) + ' 15 C' + (x + 53) + ' 10 ' + (x + 54) + ' 4 ' + (x + 60) + ' -4 Z" fill="#ffc97a"/>';
-      }
-      out += '<rect x="' + (x + 59) + '" y="14" width="2" height="7" rx="1" fill="#4a3a45"/>' +
-        '<rect x="' + (x + 47) + '" y="20" width="26" height="38" rx="3" fill="#fdf3e3"/>';
-    }
-    out += '<path d="' + body + '" fill="' + o.body + '"/>';
-    if (o.spots) out += '<rect x="' + x + '" y="50" width="120" height="60" fill="url(#' + id + 'p)" clip-path="url(#' + id + 'c)"/>';
-    out += '<ellipse cx="' + (x + 60) + '" cy="57" rx="44" ry="5" fill="' + o.rim + '"/>';
-    if (o.dots) {
-      for (let i = -4; i <= 4; i++) {
-        out += '<circle cx="' + (x + 60 + i * 9.5) + '" cy="57.4" r="1.5" fill="' + o.dots + '"/>';
-      }
-    }
-    if (o.patch) out += '<ellipse cx="' + (x + 38) + '" cy="72" rx="12" ry="8" transform="rotate(-12 ' + (x + 38) + ' 72)" fill="' + o.patch + '"/>';
-    return out;
-  }
-
-  const BISQUE = { body: '#e6ddd0', rim: '#efe8dd' };
-  const HERS = { body: '#f0adbb', rim: '#f3b3c1', dots: '#fff6ea', spots: 'rgba(197,109,131,0.35)', patch: '#ffd3dc', candle: true };
-  const HIS = { body: '#1f2d5c', rim: '#34498a', spots: null, patch: null };
-
-  function svgWrap(inner, viewBox) {
-    return '<svg viewBox="' + (viewBox || '0 -12 240 126') + '" xmlns="http://www.w3.org/2000/svg">' +
-      '<defs><radialGradient id="chapterGlow"><stop offset="0" stop-color="rgba(255,201,122,0.5)"/>' +
-      '<stop offset="1" stop-color="rgba(255,201,122,0)"/></radialGradient></defs>' + inner + '</svg>';
-  }
-
-  function paintPots() {
-    const colours = ['#f5b8c4', '#ffd3dc', '#fff6ea', '#1f2d5c', '#ffc97a', '#9db59a'];
-    return colours.map((c, i) => {
-      const cx = 30 + i * 36;
-      const cy = 38 + (i % 2) * 14;
-      return '<rect x="' + (cx - 13) + '" y="' + cy + '" width="26" height="28" rx="5" fill="rgba(255,246,234,0.14)"/>' +
-        '<ellipse cx="' + cx + '" cy="' + (cy + 2) + '" rx="11" ry="4" fill="' + c + '"/>';
-    }).join('');
-  }
-
-  function brush(x, y) {
-    return '<g transform="rotate(-38 ' + x + ' ' + y + ')">' +
-      '<rect x="' + (x - 2.5) + '" y="' + (y - 64) + '" width="5" height="48" rx="2.5" fill="#c9a37a"/>' +
-      '<rect x="' + (x - 3.2) + '" y="' + (y - 18) + '" width="6.4" height="7" fill="#a8a9b4"/>' +
-      '<path d="M' + (x - 3.2) + ' ' + (y - 11) + ' Q' + x + ' ' + (y + 4) + ' ' + (x + 3.2) + ' ' + (y - 11) + ' Z" fill="#ffd3dc"/></g>';
-  }
-
-  function laughs() {
-    const has = [[70, 40, -12, 30], [128, 22, 8, 38], [176, 58, -4, 26], [100, 92, 10, 24]];
-    return has.map(([x, y, r, size]) =>
-      '<text x="' + x + '" y="' + y + '" transform="rotate(' + r + ' ' + x + ' ' + y + ')" font-family="Caveat, cursive" font-size="' + size + '" fill="#f5b8c4">ha</text>'
-    ).join('') +
-      '<text x="40" y="92" font-size="14" fill="#ffc97a">✦</text><text x="196" y="22" font-size="12" fill="#ffc97a">✦</text>';
-  }
-
-  // the story of the first date. every line here is editable: it's his voice.
-  const chapterScenes = [
-    {
-      art: () => svgWrap(potSVG(Object.assign({ x: -4 }, BISQUE)) + potSVG(Object.assign({ x: 124 }, BISQUE))),
-      line: 'july 2026. a pottery place, and two plain pieces waiting to become something.'
-    },
-    {
-      art: () => svgWrap(paintPots()),
-      line: 'you took ages deciding which colours to use. i didn’t mind. i liked watching you decide.'
-    },
-    {
-      art: () => svgWrap(potSVG(Object.assign({ x: 60 }, HERS, { candle: false })) + brush(150, 56)),
-      line: 'then the rim. all those tiny circles. you worked on it forever, slow and careful. it came out perfect.'
-    },
-    {
-      art: () => svgWrap(potSVG(Object.assign({ x: 60 }, HIS))),
-      line: 'i painted mine dark blue. honestly, i was mostly watching yours.'
-    },
-    {
-      art: () => svgWrap(laughs()),
-      line: 'somewhere in there you laughed. i still hear it at random hours.'
-    },
-    {
-      art: () => svgWrap(potSVG(Object.assign({ x: -4 }, HERS, { lit: true })) + potSVG(Object.assign({ x: 124 }, HIS))),
-      line: 'that’s where this page started. all of it grew out of that date.'
-    },
-    {
-      art: () => svgWrap(potSVG(Object.assign({ x: 60 }, BISQUE)) + brush(112, 60)),
-      line: 'so here’s a fresh one. your turn again.',
-      final: true
-    }
-  ];
-
-  let chapterIdx = 0;
-
-  chapterDots.innerHTML = chapterScenes.map(() => '<span></span>').join('');
-
-  function showScene(i) {
-    chapterIdx = clamp(i, 0, chapterScenes.length - 1);
-    const sc = chapterScenes[chapterIdx];
-    chapterArt.innerHTML = sc.art();
-    chapterLine.textContent = sc.line;
-    replay(chapterArt, 'turn');
-    Array.from(chapterDots.children).forEach((d, j) => d.classList.toggle('on', j === chapterIdx));
-    chapterPrev.disabled = chapterIdx === 0;
-    chapterNext.textContent = sc.final ? 'paint it' : 'next';
-    if (sc.final) {
-      store(DATE_SEEN_KEY, '1');
-      paintBtn.hidden = false;
-    }
-  }
-
-  function openChapter() {
-    showScene(0);
-    openOverlay(chapter, chapterNext);
-  }
-
-  function closeChapter() {
-    closeOverlay(chapter, doorBtn);
-  }
-
-  doorBtn.addEventListener('click', openChapter);
-  chapterPrev.addEventListener('click', () => showScene(chapterIdx - 1));
-  chapterNext.addEventListener('click', () => {
-    if (chapterScenes[chapterIdx].final) {
-      closeOverlay(chapter);
-      openStudio();
-    } else {
-      showScene(chapterIdx + 1);
-    }
-  });
-  chapterExit.addEventListener('click', closeChapter);
-  chapter.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' && !chapterScenes[chapterIdx].final) { e.preventDefault(); showScene(chapterIdx + 1); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); showScene(chapterIdx - 1); }
-  });
-
-  // ---- the studio: repaint her candle holder ----
-  const glazes = [
-    { name: 'her july pink', c: '#f5b8c4' },
-    { name: 'blush', c: '#ffd3dc' },
-    { name: 'candle glow', c: '#ffc97a' },
-    { name: 'cinnamon', c: '#b5652b' },
-    { name: 'corn snake', c: '#e0703a' },
-    { name: 'sage', c: '#9db59a' },
-    { name: 'lavender', c: '#b9a7d6' },
-    { name: 'his dark blue', c: '#1f2d5c' },
-    { name: 'kingsnake cream', c: '#fff6ea' },
-    { name: 'kingsnake black', c: '#2e2a33' }
-  ];
-
-  // her original, exactly as the css draws it
-  const ORIGINAL_VARS = {
-    '--glaze': '#f5b8c4', '--glaze-deep': '#e39aab', '--glaze-edge': '#d4879b',
-    '--spots': 'rgba(197,109,131,0.30)',
-    '--patch': '#ffd3dc', '--patch-2': '#fcc4d1',
-    '--rim-top': '#fac9d3', '--rim': '#e39aab',
-    '--rim-dots': 'rgba(255,246,234,0.85)'
-  };
-
-  const PART_VARS = {
-    glaze: ['--glaze', '--glaze-deep', '--glaze-edge'],
-    spots: ['--spots'],
-    rim: ['--rim-top', '--rim'],
-    dots: ['--rim-dots']
-  };
-
-  // mix a hex colour toward white (amt > 0) or black (amt < 0)
-  function shade(hex, amt) {
-    const n = parseInt(hex.slice(1), 16);
-    const t = amt < 0 ? 0 : 255;
-    const a = Math.abs(amt);
-    const ch = (v) => Math.round(v + (t - v) * a);
-    return 'rgb(' + ch(n >> 16) + ',' + ch((n >> 8) & 255) + ',' + ch(n & 255) + ')';
-  }
-
-  function alpha(hex, a) {
-    const n = parseInt(hex.slice(1), 16);
-    return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
-  }
-
-  function partValues(part, hex) {
-    if (part === 'glaze') return [hex, shade(hex, -0.1), shade(hex, -0.18)];
-    if (part === 'spots') return [alpha(hex, 0.5)];
-    if (part === 'dots') return [alpha(hex, 0.9)];
-    return [shade(hex, 0.12), shade(hex, -0.08)];
-  }
-
-  // colours: { glaze, spots, rim, dots } of hex strings; missing = her original
-  function glazeVars(colours) {
-    const vars = Object.assign({}, ORIGINAL_VARS);
-    Object.keys(PART_VARS).forEach((part) => {
-      if (!colours[part]) return;
-      const vals = partValues(part, colours[part]);
-      PART_VARS[part].forEach((v, i) => { vars[v] = vals[i]; });
-    });
-    return vars;
-  }
-
-  function applyGlaze(el, colours) {
-    const vars = glazeVars(colours);
-    Object.keys(vars).forEach((v) => el.style.setProperty(v, vars[v]));
-  }
-
-  function loadGlaze() {
-    try { return JSON.parse(stored(GLAZE_KEY)) || {}; } catch (e) { return {}; }
-  }
-
-  let studioColours = {};
-  let studioPart = 'glaze';
-
-  studioSwatches.innerHTML = glazes.map((g) =>
-    '<button class="swatch" type="button" style="--c:' + g.c + '" data-c="' + g.c + '" aria-label="' + g.name + '" title="' + g.name + '" aria-pressed="false"></button>'
-  ).join('');
-  const swatchEls = Array.from(studioSwatches.children);
-  const partEls = Array.from(studioParts.children);
-
-  function syncStudio() {
-    applyGlaze(studioPiece, studioColours);
-    partEls.forEach((b) => b.setAttribute('aria-checked', b.dataset.part === studioPart ? 'true' : 'false'));
-    const current = studioColours[studioPart];
-    swatchEls.forEach((b) => b.setAttribute('aria-pressed', b.dataset.c === current ? 'true' : 'false'));
-    const g = glazes.find((x) => x.c === current);
-    swatchName.textContent = g ? g.name : 'as she painted it in july';
-  }
-
-  function openStudio() {
-    studioColours = loadGlaze();
-    studioPart = 'glaze';
-    syncStudio();
-    openOverlay(studio, partEls[0]);
-  }
-
-  function closeStudio() {
-    closeOverlay(studio, paintBtn.hidden ? doorBtn : paintBtn);
-  }
-
-  partEls.forEach((b) => b.addEventListener('click', () => {
-    studioPart = b.dataset.part;
-    syncStudio();
-  }));
-
-  swatchEls.forEach((b) => b.addEventListener('click', () => {
-    studioColours[studioPart] = b.dataset.c;
-    syncStudio();
-  }));
-
-  studioOriginal.addEventListener('click', () => {
-    studioColours = {};
-    syncStudio();
-  });
-
-  studioKeep.addEventListener('click', () => {
-    const kept = Object.keys(studioColours).length > 0;
-    store(GLAZE_KEY, kept ? JSON.stringify(studioColours) : null);
-    applyGlaze(document.documentElement, studioColours);
-    closeStudio();
-    lightCandle();
-    displayNote(kept ? 'kept. same piece, painted twice.' : 'back to july. exactly as you made it.', 'pink');
-    scene.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' });
-  });
-
-  paintBtn.addEventListener('click', openStudio);
-  studioExit.addEventListener('click', closeStudio);
-
-  // wear her latest version from the start
-  applyGlaze(document.documentElement, loadGlaze());
-
-  // ---- CASE FILE #003: the vanishing dinosaurs ----
-  function loadCase() {
-    try { return JSON.parse(localStorage.getItem(CASE_KEY)) || {}; } catch (e) { return {}; }
-  }
-
-  function saveCase() {
-    try {
-      localStorage.setItem(CASE_KEY, JSON.stringify({
-        found: clueEls.filter((c) => c.classList.contains('found')).map((c) => c.dataset.clue),
-        solved: caseSolved
-      }));
-    } catch (e) { /* private mode: the case just won't be remembered */ }
-  }
-
-  function markClue(clue) {
-    clue.classList.add('found');
-    const key = clue.dataset.clue;
-    const ev = casePanel.querySelector('[data-ev="' + key + '"]');
-    if (ev) { ev.classList.add('got'); ev.textContent = evLabels[key]; }
-    cluesFound++;
-  }
-
-  function markSolved() {
-    caseSolved = true;
-    caseStatus.textContent = SOLVED_STATUS;
-    caseReset.hidden = false;
-  }
-
-  caseTab.addEventListener('click', () => {
-    const open = casePanel.classList.toggle('open');
-    caseTab.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-
-  caseReset.addEventListener('click', () => {
-    try { localStorage.removeItem(CASE_KEY); } catch (e) { /* nothing to clear */ }
-    location.reload();
-  });
-
-  clueEls.forEach((clue) => {
-    clue.addEventListener('click', () => {
-      if (clue.classList.contains('found') || caseSolved) return;
-      markClue(clue);
-      saveCase();
-      casePanel.classList.add('open');
-      caseTab.setAttribute('aria-expanded', 'true');
-      if (cluesFound >= clueEls.length) {
-        caseStatus.textContent = 'STATUS: evidence complete. naming the culprits…';
-        setTimeout(solveCase, 800);
-      }
-    });
-  });
-
-  function solveCase() {
-    if (caseSolved) return;
-    markSolved();
-    saveCase();
-    revealDim.classList.add('on');
-    revealLine.textContent = 'the culprits reveal themselves…';
-    revealLine.classList.add('on');
-    setTimeout(() => dinos.forEach((d) => d.setUndercover(false)), 1200);
-    setTimeout(() => {
-      cerato.scare();
-      setTimeout(spino.scare, 550);
-    }, 2100);
-    setTimeout(() => {
-      revealDim.classList.remove('on');
-      revealLine.classList.remove('on');
-      lightCandle();
-      displayNote(caseVerdict, 'case');
-    }, 3300);
-    setTimeout(startChase, 4200);
-    setTimeout(unlockKeepsakes, 4200);
-  }
-
-  // pick up where the last visit left off
-  (function restoreCase() {
-    const saved = loadCase();
-    const found = Array.isArray(saved.found) ? saved.found : [];
-    clueEls.forEach((clue) => {
-      if (found.includes(clue.dataset.clue)) markClue(clue);
-    });
-    if (saved.solved || cluesFound >= clueEls.length) {
-      markSolved();
-      unlockKeepsakes();
-    }
-  })();
-
-  // ---- culprits at large: the chase ----
-  const chase = {
-    active: false,
-    tx: window.innerWidth / 2,
-    ty: window.innerHeight * 0.55,
-    runners: []
-  };
-
-  function setChaseTarget(x, y) {
-    chase.tx = clamp(x, 8, window.innerWidth - 8);
-    chase.ty = clamp(y, 8, window.innerHeight - 8);
-  }
-
-  // layout size, cached so the animation loop never forces a reflow
-  function measureRunner(r) {
-    r.w = r.el.offsetWidth || 60;
-    r.h = r.el.offsetHeight || 66;
-  }
-
-  function placeRunner(r) {
-    r.el.style.transform = 'translate(' + (r.x - r.w / 2) + 'px,' + (r.y - r.h + 6) + 'px)';
-  }
-
-  function cageSpot(cageEl) {
-    const c = cageEl.getBoundingClientRect();
-    return { x: c.left + c.width / 2, y: c.bottom - 12 };
-  }
-
-  function makeRunner(srcImg, opts) {
-    const el = document.createElement('div');
-    el.className = 'chaser';
-    el.setAttribute('role', 'button');
-    el.setAttribute('aria-label', opts.label);
-    el.tabIndex = 0;
-    const flip = document.createElement('span');
-    flip.className = 'flip';
-    const body = document.createElement('span');
-    body.className = 'body';
-    const img = srcImg.cloneNode(false);
-    img.removeAttribute('class');
-    img.alt = '';
-    const rawr = document.createElement('span');
-    rawr.className = 'crawr';
-    rawr.textContent = 'RAWR.';
-    const bonk = document.createElement('span');
-    bonk.className = 'cbonk';
-    bonk.textContent = opts.bonkText || 'bonk.';
-    const stars = document.createElement('span');
-    stars.className = 'cstars';
-    stars.textContent = '✦ ✦ ✦';
-    body.appendChild(img);
-    flip.appendChild(body);
-    el.appendChild(flip);
-    el.appendChild(rawr);
-    el.appendChild(bonk);
-    el.appendChild(stars);
-    document.body.appendChild(el);
-
-    const runner = {
-      el, flip, body, rawr, bonk, stars,
-      x: opts.x, y: opts.y,
-      w: 0, h: 0,
-      speed: opts.speed,          // easing per second
-      stopDist: opts.stopDist,    // personal space, px
-      face: 1,
-      popping: false,
-      stunUntil: 0,
-      rearm: 0,
-      kvx: 0,
-      kvy: 0
-    };
-
-    function pop(e) {
-      if (e) { e.preventDefault(); e.stopPropagation(); }
-      if (runner.popping) return;
-      runner.popping = true;
-      rawr.classList.remove('show');
-      replay(el, 'pop');
-      rawr.classList.add('show');
-      if (runner.caged && runner.cageFront) {
-        replay(runner.cageFront, 'rattle');
-        setTimeout(() => runner.cageFront.classList.remove('rattle'), 340);
-      }
-      setTimeout(() => { el.classList.remove('pop'); runner.popping = false; }, 520);
-      setTimeout(() => rawr.classList.remove('show'), 920);
-    }
-    el.addEventListener('pointerdown', pop);
-    el.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') pop(e);
-    });
-
-    return runner;
-  }
-
-  function bonkRunner(r, now) {
-    r.rearm = now + 1500;
-    r.stunUntil = now + 900;
-    r.stars.textContent = ankyCursor.classList.contains('heart') ? '♡ ♡ ♡' : '✦ ✦ ✦';
-    // no knockback flight when motion is reduced, just the dizzy stars
-    const ang = Math.atan2((r.y - 30) - ankyY, r.x - ankyX);
-    const force = reduceMotion.matches ? 0 : 1;
-    r.kvx = Math.cos(ang) * 360 * force;
-    r.kvy = (Math.sin(ang) * 220 - 110) * force;
-    r.bonk.classList.remove('show');
-    r.stars.classList.remove('show');
-    replay(r.el, 'bonked');
-    r.bonk.classList.add('show');
-    r.stars.classList.add('show');
-    setTimeout(() => r.el.classList.remove('bonked'), 950);
-    setTimeout(() => { r.bonk.classList.remove('show'); r.stars.classList.remove('show'); }, 1000);
-    replay(ankyCursor, 'bonk');
-    setTimeout(() => ankyCursor.classList.remove('bonk'), 340);
-  }
-
-  function chaseFrame(now) {
-    if (!chase.active) return;
-    const dt = Math.min(0.05, (now - chase.last) / 1000 || 0.016);
-    chase.last = now;
-
-    // the anky sets the pace: bleed off speed when she stops moving
-    if (now - ankyMoveT > 110) ankySpeed *= Math.exp(-4.5 * dt);
-    const norm = Math.min(1, ankySpeed / 620);
-    const paceFactor = 0.58 + norm * 1.02;   // dawdle when she's still, sprint when she bolts
-    const spaceFactor = 0.82 + norm * 0.5;   // and give her more room at speed
-
-    chase.runners.forEach((r) => {
-      if (r.caged || r.chewing) return;
-      if (!r.w) measureRunner(r);
-      let moved = 0;
-
-      if (r.goingHome) {
-        // on a mission: paddock or button
-        const dx = r.homeX - r.x;
-        const dy = r.homeY - r.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist > 6) {
-          const k = 1 - Math.pow(1 - Math.min(0.999, 3.2 * 0.016), dt / 0.016);
-          const nx = r.x + dx * Math.min(1, k);
-          const ny = r.y + dy * Math.min(1, k);
-          moved = Math.hypot(nx - r.x, ny - r.y);
-          r.x = nx; r.y = ny;
-          if (Math.abs(dx) > 4) r.face = dx >= 0 ? 1 : -1;
-        } else {
-          r.x = r.homeX; r.y = r.homeY;
-          r.goingHome = false;
-          r.el.classList.remove('running');
-          placeRunner(r);
-          if (r.homeKind === 'chew') {
-            startChew(r);
-            return;
-          }
-          r.caged = true;
-          r.el.classList.add('caged');
-          r.face = -1;
-          r.flip.style.transform = 'scaleX(-1)';
-          if (r.cageFront) r.cageFront.classList.remove('open');
-          lockCage(r);
-          return;
-        }
-      } else if (now < r.stunUntil) {
-        // knocked back by the bonk
-        r.x += r.kvx * dt;
-        r.y += r.kvy * dt;
-        const damp = Math.exp(-5.5 * dt);
-        r.kvx *= damp;
-        r.kvy *= damp;
-      } else {
-        const dx = chase.tx - r.x;
-        const dy = chase.ty - r.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist > r.stopDist * spaceFactor) {
-          const rate = Math.min(0.999, r.speed * paceFactor * 0.016);
-          const pull = Math.min(1, 1 - Math.pow(1 - rate, dt / 0.016));
-          const nx = r.x + dx * pull;
-          const ny = r.y + dy * pull;
-          moved = Math.hypot(nx - r.x, ny - r.y);
-          r.x = nx; r.y = ny;
-          if (Math.abs(dx) > 4) r.face = dx >= 0 ? 1 : -1;
-        }
-      }
-
-      r.x = clamp(r.x, r.w / 2, window.innerWidth - r.w / 2);
-      r.y = clamp(r.y, r.h, window.innerHeight - 6);
-
-      // the anky bonks whoever he touches (free-range culprits only)
-      if (ankyX !== null && !r.goingHome && now >= r.rearm) {
-        const bd = Math.hypot(ankyX - r.x, ankyY - (r.y - r.h * 0.45));
-        if (bd < 58) bonkRunner(r, now);
-      }
-
-      placeRunner(r);
-      r.flip.style.transform = 'scaleX(' + r.face + ')';
-      r.el.classList.toggle('running', moved > 0.25);
-    });
-
-    requestAnimationFrame(chaseFrame);
-  }
-
-  function startChase() {
-    if (chase.active) return;
-    chase.active = true;
-
-    // culprits duck out of the corners and hit the ground running
-    dinos.forEach((d) => d.setUndercover(true));
-
-    chase.runners = [
-      makeRunner(cerato.img, {
-        label: 'The Ceratosaurus, in hot pursuit',
-        x: 70, y: 110,
-        speed: 3.4,
-        stopDist: 58,
-        bonkText: 'ow.'
-      }),
-      makeRunner(spino.img, {
-        label: 'The Spinosaurus, in slightly less hot pursuit',
-        x: window.innerWidth - 70, y: 110,
-        speed: 2.3,
-        stopDist: 96,
-        bonkText: 'rude.'
-      })
-    ];
-
-    chase.last = performance.now();
-    requestAnimationFrame(chaseFrame);
-  }
-
-  // ---- the detective is an ankylosaurus ----
-  let ankyShown = false;
-  let ankyLastX = null;
-  let ankyWaddleT = null;
-  let ankyX = null;
-  let ankyY = null;
-  let ankySpeed = 0;
-  let ankyMoveT = 0;
-
-  function moveAnky(x, y) {
-    if (!ankyShown) {
-      ankyShown = true;
-      ankyCursor.classList.add('on');
-      if (finePointer) document.documentElement.classList.add('anky-hide-cursor');
-    }
-    // how fast is the detective actually moving?
-    const tNow = performance.now();
-    if (ankyX !== null && ankyMoveT) {
-      const gap = Math.max(8, tNow - ankyMoveT);
-      if (gap < 260) {
-        const inst = Math.hypot(x - ankyX, y - ankyY) / (gap / 1000);
-        ankySpeed += (Math.min(2600, inst) - ankySpeed) * 0.28;
-      }
-    }
-    ankyMoveT = tNow;
-    ankyX = x;
-    ankyY = y;
-    ankyCursor.style.transform = 'translate(' + x + 'px,' + y + 'px)';
-    if (ankyLastX !== null && Math.abs(x - ankyLastX) > 2) {
-      ankyCursor.classList.toggle('left', x < ankyLastX);
-    }
-    ankyLastX = x;
-    ankyCursor.classList.add('waddle');
-    clearTimeout(ankyWaddleT);
-    ankyWaddleT = setTimeout(() => ankyCursor.classList.remove('waddle'), 150);
-  }
-
-  // ---- containment protocol: the candle is the perimeter fence switch ----
-  function lockCage(r) {
-    if (r.cageFront) {
-      replay(r.cageFront, 'zap');
-      setTimeout(() => r.cageFront.classList.remove('zap'), 600);
-    }
-    const cagedCount = chase.runners.filter((q) => q.caged).length;
-    if (cagedCount === 1) {
-      caseStatus.textContent = 'STATUS: one culprit contained. one en route. (dragging their feet.)';
-    } else if (cagedCount >= 2) {
-      caseStatus.textContent = releaseCount > 0
-        ? 'STATUS: re-contained. a replacement button has been installed. (please. do not.)'
-        : 'STATUS: all culprits contained. visiting hours: always.';
-    }
-    if (r.releaseBtn) setTimeout(() => r.releaseBtn.classList.add('on'), 500);
-  }
-
-  function sendToCage(r) {
-    const spot = cageSpot(r.cageFront);
-    r.homeX = spot.x;
-    r.homeY = spot.y;
-    r.goingHome = true;
-    r.homeKind = 'cage';
-    r.stunUntil = 0;
-  }
-
-  function beginContainment() {
-    if (containmentStarted || !chase.active) return;
-    containmentStarted = true;
-    [cageBack, cageFront, cageBack2, cageFront2].forEach((c) => c.classList.add('on'));
-
-    // let the paddocks settle in, then everybody home
-    setTimeout(() => {
-      const [cer, sp] = chase.runners;
-      sp.cageFront = cageFront;
-      sp.releaseBtn = releaseBtn;
-      cer.cageFront = cageFront2;
-      cer.releaseBtn = releaseBtn2;
-      sendToCage(sp);
-      sendToCage(cer);
-    }, 680);
-  }
-
-  function recontainRunner(r) {
-    if (!r || !r.loose || r.caged || r.chewing || r.goingHome) return;
-    r.loose = false;
-    sendToCage(r);
-  }
-
-  // ---- the release buttons (two mistakes) ----
-  function wireRelease(btn, idx, cageEl, name) {
-    btn.addEventListener('click', () => {
-      const r = chase.runners[idx];
-      if (!r || !r.caged || btn.disabled) return;
-      releaseCount++;
-      btn.disabled = true;
-      // gate malfunction
-      replay(cageEl, 'zap');
-      setTimeout(() => {
-        cageEl.classList.remove('zap');
-        cageEl.classList.add('open');
-        r.caged = false;
-        r.el.classList.remove('caged');
-        caseStatus.textContent = 'STATUS: containment breach. (who pressed the button.)';
-        const br = btn.getBoundingClientRect();
-        r.goingHome = true;
-        r.homeKind = 'chew';
-        r.homeX = br.left + br.width / 2;
-        r.homeY = br.bottom + 34;
-        r.stunUntil = 0;
-        r.loose = true;
-        r.chewName = name;
-      }, 420);
-    });
-  }
-
-  wireRelease(releaseBtn, 1, cageFront, 'spinosaurus');
-  wireRelease(releaseBtn2, 0, cageFront2, 'ceratosaurus');
-
-  function startChew(r) {
-    r.chewing = true;
-    const btn = r.releaseBtn;
-    ['bite1', 'bite2', 'bite3'].forEach((cls, i) => {
-      setTimeout(() => {
-        replay(r.el, 'chomp');
-        btn.classList.add(cls);
-      }, i * 380);
-    });
-    setTimeout(() => {
-      btn.classList.add('eaten');
-      const prev = r.bonk.textContent;
-      r.bonk.textContent = 'crunch.';
-      replay(r.bonk, 'show');
-      setTimeout(() => { r.bonk.classList.remove('show'); r.bonk.textContent = prev; }, 950);
-      caseStatus.textContent = 'STATUS: the ' + r.chewName + ' ate the release button. culprit at large. (this is why we can’t have nice buttons.)';
-    }, 1180);
-    setTimeout(() => {
-      btn.classList.remove('on', 'bite1', 'bite2', 'bite3', 'eaten');
-      btn.disabled = false;
-      r.el.classList.remove('chomp');
-      r.chewing = false;
-    }, 1650);
-  }
-
-  // ---- the heart: candle clicks melt the cursor for a moment ----
-  function heartOn(ms) {
-    if (!ankyShown) return;
-    if (!ankyCursor.classList.contains('heart')) {
-      ankyCursor.classList.add('heart', 'heart-pop');
-      setTimeout(() => ankyCursor.classList.remove('heart-pop'), 650);
-    }
-    clearTimeout(heartTimer);
-    heartTimer = setTimeout(() => ankyCursor.classList.remove('heart'), ms);
-  }
-
-  // ---- rest mode: for when moving hurts ----
-  let restMode = false;
-  let restRaf = null;
-  let restNoteTimer = null;
-  let restFirstTimer = null;
-  let manualUntil = 0;
-  let kbX = null;
-  let kbY = null;
-
-  function restFrame(now) {
-    if (!restMode) return;
-    // with reduced motion (or an overlay open) the detective stays put; the notes still come
-    if (now > manualUntil && !reduceMotion.matches && !overlayOpen()) {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      // slow lissajous wander, kept well inside the edges
-      const x = w / 2 + (w * 0.30) * Math.sin(now * 0.00041);
-      const y = h * 0.54 + (h * 0.24) * Math.sin(now * 0.00062 + 1.1);
-      moveAnky(x, y);
-      setChaseTarget(x, y);
-    }
-    restRaf = requestAnimationFrame(restFrame);
-  }
-
-  function restReleaseDinos() {
-    // nobody's out yet: play the reveal hands-free
-    if (!chase.active) {
-      if (!caseSolved) {
-        clueEls.forEach((clue) => {
-          if (!clue.classList.contains('found')) clue.click();
-        });
-        return true;
-      }
-      startChase();
-      return false;
-    }
-    // already out, but locked up: let them stretch their legs
-    let freed = false;
-    chase.runners.forEach((r) => {
-      if (!r.caged) return;
-      r.caged = false;
-      r.el.classList.remove('caged');
-      r.goingHome = false;
-      r.homeKind = null;
-      r.stunUntil = 0;
-      r.loose = true;
-      if (r.cageFront) r.cageFront.classList.add('open');
-      if (r.releaseBtn) r.releaseBtn.classList.remove('on');
-      freed = true;
-    });
-    if (freed) {
-      caseStatus.textContent = 'STATUS: paroled for rest mode. supervised chasing only.';
-    }
-    return false;
-  }
-
-  function startRestNotes(delay) {
-    clearTimeout(restFirstTimer);
-    clearInterval(restNoteTimer);
-    restFirstTimer = setTimeout(() => {
-      if (!restMode) return;
-      displayNote(nextNote(), false);
-      restNoteTimer = setInterval(() => {
-        if (restMode) displayNote(nextNote(), false);
-      }, 14000);
-    }, delay);
-  }
-
-  function startRest() {
-    restMode = true;
-    restBtn.classList.add('on');
-    restBtn.textContent = '☀︎ rest mode: on';
-    restBtn.setAttribute('aria-pressed', 'true');
-    restNote.classList.add('on');
-    lightCandle();
-    if (restReleaseDinos()) {
-      // let the reveal and verdict land before the notes take over
-      startRestNotes(11000);
-    } else {
-      displayNote(nextNote(), false);
-      startRestNotes(14000);
-    }
-    restRaf = requestAnimationFrame(restFrame);
-  }
-
-  function stopRest() {
-    restMode = false;
-    restBtn.classList.remove('on');
-    restBtn.textContent = '💤 rest mode';
-    restBtn.setAttribute('aria-pressed', 'false');
-    restNote.classList.remove('on');
-    clearTimeout(restFirstTimer);
-    clearInterval(restNoteTimer);
-    cancelAnimationFrame(restRaf);
-  }
-
-  restBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (restMode) stopRest(); else startRest();
-    restBtn.blur();
-  });
-
-  // ---- input ----
-  function onPointer(x, y) {
-    moveAnky(x, y);
-    setChaseTarget(x, y);
-    dinos.forEach((d) => d.stalk(x, y));
-  }
-
-  function resetDinos() {
-    dinos.forEach((d) => d.reset());
-  }
-
-  window.addEventListener('pointermove', (e) => {
-    onPointer(e.clientX, e.clientY);
-    // a real pointer always wins; autopilot picks back up after a pause
-    if (restMode) manualUntil = performance.now() + 4000;
-  });
-  window.addEventListener('pointerdown', (e) => onPointer(e.clientX, e.clientY));
-  window.addEventListener('touchmove', (e) => {
-    if (e.touches && e.touches[0]) onPointer(e.touches[0].clientX, e.touches[0].clientY);
-  }, { passive: true });
-  document.documentElement.addEventListener('pointerleave', resetDinos);
-  window.addEventListener('blur', resetDinos);
-
-  const steerKeys = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
-
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (breathOpen()) closeBreath();
-      else if (chapter.classList.contains('on')) closeChapter();
-      else if (studio.classList.contains('on')) closeStudio();
-      else if (casePanel.classList.contains('open')) caseTab.click();
-      return;
-    }
-    if (!onMain() || overlayOpen() || e.defaultPrevented) return;
-
-    // keyboard steering: no dragging, no reaching. only while there's something to steer
-    const steer = steerKeys[e.key];
-    if (steer) {
-      if (!restMode && !chase.active) return;
-      e.preventDefault();
-      if (kbX === null) {
-        kbX = ankyX !== null ? ankyX : window.innerWidth / 2;
-        kbY = ankyY !== null ? ankyY : window.innerHeight * 0.55;
-      }
-      kbX = clamp(kbX + steer[0] * 34, 10, window.innerWidth - 10);
-      kbY = clamp(kbY + steer[1] * 34, 10, window.innerHeight - 10);
-      manualUntil = performance.now() + 4000;
-      moveAnky(kbX, kbY);
-      setChaseTarget(kbX, kbY);
-      return;
-    }
-    if (e.key === ' ' || e.key === 'Enter') {
-      // real controls handle their own keys
-      if (e.target instanceof Element && e.target.closest('button, a, [role="button"]')) return;
-      e.preventDefault();
-      lightCandle();
-      displayNote(nextNote(), false);
-      heartOn(3000);
-    }
-  });
-
-  // paddocks move with the layout, so re-measure on resize / rotation
-  window.addEventListener('resize', () => {
-    setChaseTarget(chase.tx, chase.ty);
-    chase.runners.forEach((r) => {
-      measureRunner(r);
-      if (!r.cageFront) return;
-      if (r.caged || (r.goingHome && r.homeKind === 'cage')) {
-        const spot = cageSpot(r.cageFront);
-        r.homeX = spot.x;
-        r.homeY = spot.y;
-        if (r.caged) { r.x = spot.x; r.y = spot.y; placeRunner(r); }
-      }
-    });
-  });
-</script>
 
 </body>
 </html>
