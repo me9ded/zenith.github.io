@@ -89,13 +89,11 @@
   --paper-his: #e8edfb;
   --ink-his: #26366e;
 
-  /* her candle holder, exactly as she painted it in july (the studio can repaint it) */
+  /* her candle holder, exactly as she painted it on may 29th (the studio can repaint it) */
   --glaze: #f5b8c4;
   --glaze-deep: #e39aab;
   --glaze-edge: #d4879b;
   --spots: rgba(197, 109, 131, 0.30);
-  --patch: #ffd3dc;
-  --patch-2: #fcc4d1;
   --rim-top: #fac9d3;
   --rim: #e39aab;
   --rim-dots: rgba(255, 246, 234, 0.85);
@@ -627,15 +625,6 @@ h2 { font-size: var(--text-h2); margin-top: var(--space-4); }
     linear-gradient(160deg, var(--glaze) 0%, var(--glaze-deep) 78%, var(--glaze-edge) 100%);
   border-radius: 14px 14px 60px 60px / 14px 14px 78px 78px;
   box-shadow: inset 0 -12px 24px rgba(0, 0, 0, 0.18), inset 8px 6px 14px rgba(255, 255, 255, 0.28), 0 24px 30px -18px rgba(0, 0, 0, 0.7);
-}
-.holder::after {
-  content: "";
-  position: absolute;
-  top: 16px; left: 22px;
-  width: 44px; height: 30px;
-  background: linear-gradient(140deg, var(--patch) 0%, var(--patch-2) 100%);
-  border-radius: 60% 45% 55% 50% / 55% 60% 45% 55%;
-  opacity: 0.9;
 }
 .holder-rim {
   position: absolute;

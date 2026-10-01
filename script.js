@@ -577,13 +577,12 @@
         out += '<circle cx="' + (x + 60 + i * 9.5) + '" cy="57.4" r="1.5" fill="' + o.dots + '"/>';
       }
     }
-    if (o.patch) out += '<ellipse cx="' + (x + 38) + '" cy="72" rx="12" ry="8" transform="rotate(-12 ' + (x + 38) + ' 72)" fill="' + o.patch + '"/>';
     return out;
   }
 
   const BISQUE = { body: '#e6ddd0', rim: '#efe8dd' };
-  const HERS = { body: '#f0adbb', rim: '#f3b3c1', dots: '#fff6ea', spots: 'rgba(197,109,131,0.35)', patch: '#ffd3dc', candle: true };
-  const HIS = { body: '#1f2d5c', rim: '#34498a', spots: null, patch: null };
+  const HERS = { body: '#f0adbb', rim: '#f3b3c1', dots: '#fff6ea', spots: 'rgba(197,109,131,0.35)', candle: true };
+  const HIS = { body: '#1f2d5c', rim: '#34498a', spots: null };
 
   function svgWrap(inner, viewBox) {
     return '<svg viewBox="' + (viewBox || '0 -12 240 126') + '" xmlns="http://www.w3.org/2000/svg">' +
@@ -620,7 +619,7 @@
   const chapterScenes = [
     {
       art: () => svgWrap(potSVG(Object.assign({ x: -4 }, BISQUE)) + potSVG(Object.assign({ x: 124 }, BISQUE))),
-      line: 'july 2026. a pottery place, and two plain pieces waiting to become something.'
+      line: 'may 29th. a pottery place, and two plain pieces waiting to become something.'
     },
     {
       art: () => svgWrap(paintPots()),
@@ -695,7 +694,7 @@
 
   // ---- the studio: repaint her candle holder ----
   const glazes = [
-    { name: 'her july pink', c: '#f5b8c4' },
+    { name: 'her may pink', c: '#f5b8c4' },
     { name: 'blush', c: '#ffd3dc' },
     { name: 'candle glow', c: '#ffc97a' },
     { name: 'cinnamon', c: '#b5652b' },
@@ -711,7 +710,6 @@
   const ORIGINAL_VARS = {
     '--glaze': '#f5b8c4', '--glaze-deep': '#e39aab', '--glaze-edge': '#d4879b',
     '--spots': 'rgba(197,109,131,0.30)',
-    '--patch': '#ffd3dc', '--patch-2': '#fcc4d1',
     '--rim-top': '#fac9d3', '--rim': '#e39aab',
     '--rim-dots': 'rgba(255,246,234,0.85)'
   };
@@ -779,7 +777,7 @@
     const current = studioColours[studioPart];
     swatchEls.forEach((b) => b.setAttribute('aria-pressed', b.dataset.c === current ? 'true' : 'false'));
     const g = glazes.find((x) => x.c === current);
-    swatchName.textContent = g ? g.name : 'as she painted it in july';
+    swatchName.textContent = g ? g.name : 'as she painted it on may 29th';
   }
 
   function openStudio() {
@@ -814,7 +812,7 @@
     applyGlaze(document.documentElement, studioColours);
     closeStudio();
     lightCandle();
-    displayNote(kept ? 'kept. same piece, painted twice.' : 'back to july. exactly as you made it.', 'pink');
+    displayNote(kept ? 'kept. same piece, painted twice.' : 'back to may 29th. exactly as you made it.', 'pink');
     showCandle();
   });
 
