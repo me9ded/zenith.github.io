@@ -15,7 +15,9 @@
 <link rel="preload" href="assets/fonts/karla.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/caveat.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
+<script src="sketchbook-config.js" defer></script>
 <script src="script.js" defer></script>
+<script src="sketchbook.js" defer></script>
 </head>
 <body>
 
@@ -59,6 +61,7 @@
         <a href="#notes">notes</a>
         <a href="#breathe">breathe</a>
         <a href="#case">case</a>
+        <a href="#draw">draw</a>
         <a href="#rest">rest</a>
       </nav>
     </div>
@@ -115,6 +118,19 @@
           <span class="choice-title">solve something silly</span>
           <span class="choice-desc" id="choiceCaseDesc">case #003. three clues, two suspects, one missing cookie.</span>
           <span class="choice-cta">open the file <span aria-hidden="true">&rarr;</span></span>
+        </button>
+
+        <button class="choice choice-draw" type="button" data-go="draw">
+          <svg class="choice-art" width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="8" y="8" width="28" height="34" rx="3" fill="#f7eddc" transform="rotate(-5 22 25)"/>
+            <path d="M14 30 C17 22 21 34 25 26 S30 22 31 28" stroke="#e39aab" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <circle cx="18" cy="17" r="2.6" fill="#ffc97a"/>
+            <path d="M42 8 L30 30" stroke="#c9a37a" stroke-width="3.4" stroke-linecap="round"/>
+            <path d="M30.6 28.6 L28.4 33.4 L32.6 30.4 Z" fill="#3b2c35"/>
+          </svg>
+          <span class="choice-title">a little space to draw</span>
+          <span class="choice-desc">a sketchbook for whatever comes to mind. no right way to use it.</span>
+          <span class="choice-cta">open it <span aria-hidden="true">&rarr;</span></span>
         </button>
 
         <button class="choice choice-rest" type="button" data-go="rest">
@@ -500,6 +516,39 @@
       </article>
     </section>
 
+    <!-- ================= the sketchbook ================= -->
+    <section class="sec draw-sec" id="draw" aria-labelledby="drawTitle">
+      <div class="sec-head reveal">
+        <p class="eyebrow">the sketchbook</p>
+        <h2 id="drawTitle">a little space to <em>draw</em></h2>
+        <p class="lede">a little space for whatever comes to mind. doodle something, make a tiny mess, or just play around. there's no right way to use this space. &#9825;</p>
+      </div>
+
+      <div class="sketch-shelf reveal">
+        <button class="sketch-book" id="sketchCover" type="button" aria-label="Open the sketchbook">
+          <span class="sketch-rings" aria-hidden="true"></span>
+          <span class="sketch-leaf">
+            <img class="sketch-thumb" id="sketchThumb" alt="" hidden>
+            <svg class="sketch-blank" id="sketchBlank" width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+              <g fill="none" stroke="#c9b9a6" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 6">
+                <circle cx="60" cy="50" r="10"/>
+                <path d="M60 40 C52 26 68 26 60 40 M70 50 C84 42 84 58 70 50 M60 60 C68 74 52 74 60 60 M50 50 C36 58 36 42 50 50"/>
+                <path d="M60 62 C60 80 58 92 56 104"/>
+              </g>
+            </svg>
+          </span>
+        </button>
+        <div class="sketch-side">
+          <p class="sketch-state" id="sketchShelfState">a blank page, whenever you want it.</p>
+          <div class="sketch-actions">
+            <button class="btn btn-primary" id="sketchOpen" type="button">open the sketchbook</button>
+            <button class="btn btn-quiet" id="galleryOpen" type="button" hidden>the shared sketchbook</button>
+          </div>
+          <p class="sketch-note" id="sketchNote">drawings stay on this device.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= rest ================= -->
     <section class="sec rest-sec" id="rest" aria-labelledby="restTitle">
       <div class="sec-head reveal">
@@ -560,6 +609,167 @@
 </div>
 
 <!-- ================= overlays ================= -->
+<div class="overlay sb-overlay sketchbook" id="sketchbook" role="dialog" aria-modal="true" aria-labelledby="sbTitle" inert>
+  <div class="sb-wrap">
+    <header class="sb-head">
+      <button class="sb-x" id="sbCloseTop" type="button" aria-label="Close the sketchbook">
+        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4 L14 14 M14 4 L4 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <p class="eyebrow" id="sbTitle">the sketchbook</p>
+      <p class="sb-state" id="sbState" aria-live="polite">a blank page</p>
+    </header>
+
+    <div class="sb-page" id="sbPage">
+      <div class="sb-rings" aria-hidden="true"></div>
+      <canvas class="sb-canvas" id="sbCanvas" role="img" aria-label="Your drawing" aria-describedby="sbHelp"></canvas>
+      <p class="sb-empty" id="sbEmpty" aria-hidden="true">draw anything &#9825;</p>
+    </div>
+    <p class="visually-hidden" id="sbHelp">Draw with a mouse, a finger or a stylus. Choose a colour and a brush size below. Control or Command plus Z undoes, plus Shift redoes.</p>
+
+    <div class="sb-side">
+    <div class="sb-tools" role="toolbar" aria-label="Drawing tools">
+      <div class="sb-colours" id="sbColours" role="radiogroup" aria-label="Colour"></div>
+      <div class="sb-row">
+        <div class="sb-sizes" id="sbSizes" role="radiogroup" aria-label="Brush size"></div>
+        <span class="sb-divider" aria-hidden="true"></span>
+        <button class="sb-tool" id="sbEraser" type="button" aria-pressed="false">
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 13 L10 6 L15 11 L9 17 H5 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 9 L12 14" stroke="currentColor" stroke-width="1.6"/></svg>
+          <span>eraser</span>
+        </button>
+        <button class="sb-tool" id="sbUndo" type="button" disabled>
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5 L3 9 L7 13 M3 9 H12 a4.5 4.5 0 0 1 0 9 H9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>undo</span>
+        </button>
+        <button class="sb-tool" id="sbRedo" type="button" disabled>
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M13 5 L17 9 L13 13 M17 9 H8 a4.5 4.5 0 0 0 0 9 H11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>redo</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="sb-actions">
+      <button class="btn btn-primary" id="sbShare" type="button" hidden>share this drawing</button>
+      <button class="btn btn-quiet" id="sbSave" type="button">save draft</button>
+      <button class="btn btn-quiet" id="sbDownload" type="button">download</button>
+    </div>
+    <div class="sb-minor">
+      <button class="link-btn" id="sbNew" type="button">new page</button>
+      <button class="link-btn" id="sbClear" type="button">clear this page</button>
+      <button class="link-btn" id="sbDraftsToggle" type="button" aria-expanded="false" aria-controls="sbDrafts">your drafts</button>
+    </div>
+
+    <section class="sb-drafts" id="sbDrafts" hidden aria-label="Your drafts">
+      <p class="sb-drafts-note">your drafts live only on this device. no one else can see them.</p>
+      <ul class="sb-draft-list" id="sbDraftList"></ul>
+    </section>
+    </div>
+
+    <button class="link-btn overlay-exit" id="sbClose" type="button">close the sketchbook</button>
+  </div>
+</div>
+
+<div class="overlay sb-overlay gallery" id="gallery" role="dialog" aria-modal="true" aria-labelledby="galTitle" inert>
+  <div class="gal-wrap">
+    <button class="sb-x" id="galCloseTop" type="button" aria-label="Close the shared sketchbook">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4 L14 14 M14 4 L4 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow" id="galTitle">the shared sketchbook</p>
+    <h2 class="gal-heading">drawings you <em>chose</em> to share</h2>
+    <div class="gal-body" id="galBody" aria-live="polite"></div>
+    <div class="gal-foot">
+      <button class="link-btn" id="galSignOut" type="button" hidden>sign out on this device</button>
+      <button class="link-btn overlay-exit" id="galClose" type="button">back to the page</button>
+    </div>
+  </div>
+</div>
+
+<!-- small dialogs: native <dialog> keeps focus inside and closes on Escape -->
+<dialog class="sb-dialog" id="sbConfirm" aria-labelledby="sbConfirmTitle">
+  <form method="dialog">
+    <h3 id="sbConfirmTitle"></h3>
+    <p id="sbConfirmText"></p>
+    <div class="sb-dialog-actions" id="sbConfirmActions"></div>
+  </form>
+</dialog>
+
+<dialog class="sb-dialog" id="sbShareDialog" aria-labelledby="sbShareTitle">
+  <div class="sb-share-step" data-step="ask">
+    <h3 id="sbShareTitle">share this drawing?</h3>
+    <img class="sb-share-preview" id="sbSharePreview" alt="the drawing you're about to share">
+    <p>it'll be added to the shared sketchbook, where the two of you can see it. your page stays here either way.</p>
+    <label class="sb-field">
+      <span>give it a name <em>(optional)</em></span>
+      <input type="text" id="sbShareName" maxlength="80" autocomplete="off">
+    </label>
+    <div class="sb-dialog-actions">
+      <button class="btn btn-quiet" type="button" data-close>not now</button>
+      <button class="btn btn-primary" type="button" id="sbShareGo">share it</button>
+    </div>
+  </div>
+  <div class="sb-share-step" data-step="busy" hidden>
+    <h3>sharing&hellip;</h3>
+    <div class="sb-progress" role="progressbar" aria-label="upload progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="sbProgressBar"></span></div>
+    <p class="sb-muted" id="sbShareBusyText">sending your drawing</p>
+  </div>
+  <div class="sb-share-step" data-step="done" hidden>
+    <h3>shared &#9825;</h3>
+    <p>it's in the shared sketchbook now.</p>
+    <div class="sb-dialog-actions">
+      <button class="btn btn-quiet" type="button" id="sbShareSee">see it there</button>
+      <button class="btn btn-primary" type="button" data-close>keep drawing</button>
+    </div>
+  </div>
+  <div class="sb-share-step" data-step="error" hidden>
+    <h3>that didn't go through</h3>
+    <p id="sbShareError"></p>
+    <div class="sb-dialog-actions">
+      <button class="btn btn-quiet" type="button" data-close>okay</button>
+      <button class="btn btn-primary" type="button" id="sbShareRetry">try again</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="sb-dialog" id="sbAuth" aria-labelledby="sbAuthTitle">
+  <form class="sb-auth-step" data-step="email" novalidate>
+    <h3 id="sbAuthTitle">sign in to the shared sketchbook</h3>
+    <p>only the two people this sketchbook is for can sign in. we'll email you a one-time code.</p>
+    <label class="sb-field">
+      <span>your email</span>
+      <input type="email" id="sbAuthEmail" autocomplete="email" required>
+    </label>
+    <p class="sb-error" id="sbAuthEmailError" role="alert"></p>
+    <div class="sb-dialog-actions">
+      <button class="btn btn-quiet" type="button" data-close>not now</button>
+      <button class="btn btn-primary" type="submit" id="sbAuthSend">send me a code</button>
+    </div>
+  </form>
+  <form class="sb-auth-step" data-step="code" novalidate hidden>
+    <h3>check your email</h3>
+    <p>if that email belongs to this sketchbook, a code is on its way to <strong id="sbAuthSentTo"></strong>.</p>
+    <label class="sb-field">
+      <span>the code</span>
+      <input type="text" id="sbAuthCode" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="10" required>
+    </label>
+    <p class="sb-error" id="sbAuthCodeError" role="alert"></p>
+    <div class="sb-dialog-actions">
+      <button class="btn btn-quiet" type="button" id="sbAuthBack">use a different email</button>
+      <button class="btn btn-primary" type="submit" id="sbAuthVerify">sign in</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="sb-dialog sb-viewer" id="sbViewer" aria-labelledby="sbViewerTitle">
+  <img class="sb-viewer-img" id="sbViewerImg" alt="">
+  <div class="sb-viewer-meta">
+    <h3 id="sbViewerTitle"></h3>
+    <p class="sb-muted" id="sbViewerWhen"></p>
+  </div>
+  <div class="sb-dialog-actions">
+    <button class="btn btn-quiet" type="button" id="sbViewerDelete" hidden>unshare</button>
+    <button class="btn btn-primary" type="button" data-close>close</button>
+  </div>
+</dialog>
+
 <div class="overlay breath" id="breathOverlay" role="dialog" aria-modal="true" aria-labelledby="breathTitle" inert>
   <p class="eyebrow" id="breathTitle">breathe with the axolotl</p>
   <div class="breath-stage" id="breathStage" data-phase="ready">

@@ -349,7 +349,7 @@
         links.forEach((a) => a.setAttribute('aria-current', a.getAttribute('href') === '#' + en.target.id ? 'true' : 'false'));
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
-    ['top', 'notes', 'breathe', 'case', 'rest'].forEach((id) => spy.observe($(id)));
+    ['top', 'notes', 'breathe', 'case', 'draw', 'rest'].forEach((id) => spy.observe($(id)));
   }
 
   // ---- what sounds good right now? ----
@@ -363,6 +363,8 @@
         openBreath(btn);
       } else if (go === 'case') {
         $('case').scrollIntoView({ behavior: motion(), block: 'start' });
+      } else if (go === 'draw') {
+        window.dispatchEvent(new Event('sketchbook:open'));
       } else if (go === 'rest') {
         if (!restMode) startRest();
         else showCandle();

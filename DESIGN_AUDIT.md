@@ -126,3 +126,53 @@ A private page for one person's heavy days:
 6. **Build a real token system** for colour, type, space, radius and motion;
    self-host the fonts; split the code into `index.html`, `styles.css` and
    `script.js`.
+
+---
+
+# The sketchbook (added October 2026)
+
+## Where it fits
+
+The page already reads as a short journey (cover → choices → candle → pond →
+case → rest → ending). The sketchbook joins it as its own stop, **"a little space
+to draw"**, between the case and rest, and as a fifth way in on the welcome
+cards. It lives in its own `sketchbook.js`, so nothing about the existing
+experiences changed.
+
+## Design
+
+- **On the page**: a notebook left open on the table: dotted paper, spiral
+  rings, a slight tilt. It shows a peek of the current page, or a faint dotted
+  flower when blank. The copy is the gentle line from the brief, lowercased to
+  match the site's voice.
+- **Drawing** happens in a full-screen overlay, like the breathing and studio
+  screens, so a finger on a phone never fights page scrolling. Only the canvas
+  sets `touch-action: none`.
+- **The page** is a 4:5 notebook leaf (1000×1250 page units). On desktop the tools
+  sit in a column beside it so the page can be large; on phones they stack
+  beneath, with icon-only tools (labels kept for screen readers).
+- **Tools**, kept few: 8 colours from the site's palette, 3 brush sizes, an
+  eraser, undo and redo. Then save draft, download, and (when connected) share.
+  The chosen colour gets a tick, so it never relies on colour alone.
+- **The shared gallery** is polaroids on the dark table, each with a handwritten
+  title, the date, and "yours" / "from …". Opening one shows it large.
+- **Language** says plainly where a drawing is: "only on this device · not
+  shared", "saved as a draft · only on this device", "shared ♡". Nothing
+  nudges her to share, draw more, or come back.
+
+## Technical constraints and decisions
+
+- **GitHub Pages is static**, so privacy can't come from the site. Supabase
+  provides sign-in, a database and private storage; row-level security and
+  storage policies enforce everything (see README).
+- **Strokes, not pixels**: the drawing is a list of strokes in page units, so
+  resizing, rotation and high-DPI screens re-draw losslessly, and undo/redo are exact.
+- **Drafts in IndexedDB**: local only, and never uploaded automatically, including
+  when the connection comes back.
+- **The Supabase client is vendored and lazy-loaded**: no CDN, and it's only
+  fetched when someone opens the gallery or shares.
+- **One-time codes, not magic links**: a code works even when the email opens
+  in a different app's browser, which breaks magic links on phones.
+- **Uploads use XHR** so real progress can be shown, and a drawing is only
+  called "shared" after both the image upload and the database row succeed. If
+  the row fails, the image is removed again.
