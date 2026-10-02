@@ -19,13 +19,14 @@
     "Just so you know you're a cinnamon girl who solves every murder mystery you'll solve this one too \u2764\ufe0f",
     "if the dinosaurs are chasing you right now, that's not stress. that's cardio.",
     "the bonk is legally protected self-defence. the ankylosaurus and I checked.",
-    "do not press the yellow buttons. (press the yellow buttons.)",
+    "do not press the yellow buttons. (press the yellow buttons to release them!)",
     "You're allowed to be tired without earning it.",
     "Whatever went wrong today, it doesn't get to follow you in here. This page has a strict door policy.",
     "You've survived 100% of your worst days so far. Statistically incredible. Keep the streak.",
-    "You have a way of making small things careful and careful things beautiful. I noticed it the first hour I knew you.",
+    "You have a way of making small things careful and careful things beautiful. I noticed it since I've gotten to know you.",
     "For the record: your laugh has been stuck in my head since the pottery place. I've stopped fighting it.",
-    "Rate today out of 10. Wrong answers accepted. I want to hear them all."
+    "Rate today out of 10. Wrong answers accepted. I want to hear them all.",
+    "My cutie you don't know how much I care for you."  
   ];
 
   // only shuffled into the deck late at night (22:00 to 04:59)
@@ -40,7 +41,7 @@
   const caseVerdict = "CASE FILE #003: the vanishing dinosaurs\nVICTIM: one (1) cookie. devoured at the scene.\nEVIDENCE: three-toed footprints. a torn confession reading 'RAW\u2014'. a chalk outline where the cookie used to be.\nVERDICT: it was the ceratosaurus and the spinosaurus. in the margins. with the RAWR.\nSENTENCE: to chase the detective around this page forever.\n\u2014 detective amine";
 
   const hisNotes = [
-    "mine was the dark blue one, from the same table. on here i let it borrow your kingsnake's stripes.",
+    "mine was the dark blue one, from the same table. on here I let it borrow your kingsnake's stripes.",
     "two candles now. yours lights the whole page. mine just likes sitting next to it."
   ];
 
@@ -50,7 +51,7 @@
   ];
 
   const evLabels = {
-    tracks: 'suspicious footprints (three toes. hm.)',
+    tracks: 'suspicious footprints (three toes )',
     scrap: "a torn confession ('RAW—')",
     chalk: 'the victim (one cookie, devoured)'
   };
